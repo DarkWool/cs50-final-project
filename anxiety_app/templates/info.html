@@ -1,0 +1,53 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Test Information{% endblock %}
+
+{% block body %}
+<body class="full-viewp">
+{% include "layout/header.html" %}
+    <main class="full-cg">
+        <section class="tinfo">
+            <div class="col-50 m-a">
+                <img src="#" class="tinfo_image" alt="">
+            </div>
+            <div class="col-50 tinfo_content">
+                <h1 class="tinfo_title">LET’S <span class="accent-pink">DO IT!</span></h1>
+                <hr>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus iaculis libero dolor, eget volutpat ligula blandit
+                    sit amet. Donec et vehicula nisl. Pellentesque ut lorem nec lectus pulvinar suscipit. Praesent congue interdum posuere.
+                    Maecenas interdum facilisis erat, facilisis cursus felis ullamcorper id. Ut massa urna, iaculis eu metus quis, facilisis
+                    sagittis velit. Integer turpis ex, venenatis non imperdiet eget, maximus eu nisi. In turpis eros, efficitur vel cursus
+                    sollicitudin, tristique sit amet diam. Suspendisse lobortis augue neque, ut sollicitudin dolor euismod vitae. Donec
+                    tincidunt euismod risus, at pretium nibh cursus eget. Donec rhoncus velit id mauris posuere, a maximus lorem faucibus.
+                    Fusce pretium luctus elit, id dignissim arcu pellentesque eleifend. Cras malesuada in dolor id aliquam. Quisque rhoncus
+                    velit eget metus euismod, vitae tincidunt leo tristique. Morbi interdum elit nec lacinia vehicula.
+                </p>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus iaculis libero dolor, eget volutpat ligula blandit
+                    sit amet. Donec et vehicula nisl. Pellentesque ut lorem nec lectus pulvinar suscipit. Praesent congue interdum posuere.
+                    Maecenas interdum facilisis erat, facilisis cursus felis ullamcorper id. Ut massa urna, iaculis eu metus quis, facilisis sagittis velit.
+                </p>
+
+                <div class="warning">
+                    <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" class="warning_icon">
+                        <path
+                            d="M12 1l-12 22h24l-12-22zm-1 8h2v7h-2v-7zm1 11.25c-.69 0-1.25-.56-1.25-1.25s.56-1.25 1.25-1.25 1.25.56 1.25 1.25-.56 1.25-1.25 1.25z" />
+                    </svg>
+                    <div class="warning_content">
+                        <h2 class="warning_title">Please, bear in mind...</h2>
+                        <p>Even when the results indicate that you can possibly have an anxiety disorder it's important for you to seek professional help to have a proper diagnostic and the right treatment.</p>
+                    </div>
+                </div>
+
+                <div class="tinfo_input">
+                    <input type="checkbox" id="confirm" required>
+                    <label for="confirm">I have read the information provided and I want to continue.</label>
+                </div>
+
+                <a href="www.google.com/" class="primary-btn full-w-center">START</a>
+            </div>
+        </section>
+    </main>
+</body>
+{% endblock %}

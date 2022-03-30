@@ -3,6 +3,7 @@
 {% block title %}Stop Anxiety{% endblock %}
 
 {% block body %}
+<body>
 {% include "layout/header.html" %}
     <section id="main" class="content-width">
         <div class="col-40">
@@ -15,7 +16,7 @@
                 adipiscing est et sed.
             </p>
             <div class="txt-c">
-                <a href="#" class="primary-btn">Take the test</a>
+                <a href="{{ url_for('info') }}" class="primary-btn">Take the test</a>
             </div>
         </div>
         <div class="col-60">
@@ -23,7 +24,7 @@
     </section>
     <section class="quote">
         <div class="quote_c">
-            <h2>Today’s quote</h2>
+            <h2 class="quote_title">Today’s quote</h2>
             <figure>
                 <blockquote class="quote_text">
                     Etiam viverra tortor ut sodales elementum. Morbi nec placerat arcu. Duis auctor at orci eu hendrerit. Donec sed metus
@@ -103,4 +104,5 @@
             </div>
         </div>
     </section>
+</body>
 {% endblock %}

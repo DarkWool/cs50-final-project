@@ -12,11 +12,16 @@
     --purple: hsl(256, 100%, 50%);
 }
 
-body {
-    font-family: Inter, sans-serif;
+/* General styles */
+html, body {
+    height: 100%;
 }
 
-/* General styles */
+body, input, button {
+    font-family: Inter, sans-serif;
+    line-height: 1.2;
+}
+
 a {
     text-decoration: none;
     display: inline-block;
@@ -28,16 +33,10 @@ h1, h2, h3, h4, h5, h6, button {
 
 h1 {
     font-size: 48px;
-    text-align: center;
-    line-height: 1;
-    margin-bottom: 20px;
-    position: relative;
 }
 
 h2 {
     font-size: 36px;
-    text-align: center;
-    margin-bottom: 20px;
 }
 
 h3 {
@@ -45,6 +44,24 @@ h3 {
     font-weight: 700;
     text-align: center;
     margin-bottom: 10px;
+}
+
+p + p {
+    margin-top: 10px;
+}
+
+input {
+    accent-color: var(--purple);
+}
+
+input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+hr {
+    border: 1px solid hsl(212, 48%, 94%);
+    margin-bottom: 20px;
 }
 
 /* Header styles */
@@ -68,6 +85,13 @@ h3 {
     display: flex;
     align-items: center;
     margin: 50px auto;
+}
+
+.main_title {
+    font-size: 48px;
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
 }
 
 .main_title::before {
@@ -100,6 +124,11 @@ h3 {
     margin: auto;
     position: relative;
     padding: 6em 0;
+}
+
+.quote_title {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .quote_text {
@@ -255,23 +284,82 @@ h3 {
 }
 
 
+/* INFORMATION PAGE */
+
+/* Information section */
+.tinfo {
+    display: flex;
+    max-width: 1300px;
+    margin: auto;
+}
+
+.tinfo_title {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.tinfo_image {
+    display: block;
+    margin: auto;
+    max-width: 550px;
+    width: 100%;
+    height: auto;
+}
+
+.tinfo_content {
+    padding: 50px;
+    border-radius: 20px;
+}
+
+.tinfo_input {
+    text-align: center;
+    font-weight: 600;
+    margin-top: 25px;
+}
+
+
 /* Buttons */
+button, input[type="submit"] {
+    cursor: pointer;
+}
+
 .primary-btn {
-    display: inline-block;
-    padding: 20px 20px;
+    padding: 20px 30px;
     font-size: 18px;
     font-weight: 700;
     background-color: var(--purple);
     color: white;
     box-shadow: 0px 8px 35px rgba(66, 0, 255, 0.3);
     border-radius: 50px;
+    border: 0;
     text-transform: uppercase;
+}
+
+.full-w-center {
+    display: block;
+    width: 100%;
+    margin-top: 25px;
+    text-align: center;
 }
 
 
 /* Utilities */
 .content-width {
     max-width: 1300px;
+    margin: auto;
+}
+
+.full-cg {
+    display: flex;
+    flex-grow: 1;
+}
+
+.full-viewp {
+    display: flex;
+    flex-direction: column;
+}
+
+.m-a {
     margin: auto;
 }
 
@@ -283,10 +371,49 @@ h3 {
     width: 40%;
 }
 
+.col-50 {
+    width: 50%;
+}
+
+.f-x {
+    display: flex;
+}
+
 .txt-c {
     text-align: center;
 }
 
-.accent {
+.accent-purple {
     color: var(--purple);
+}
+
+.accent-pink {
+    color: var(--pink);
+}
+
+.warning {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-top: 25px;
+    padding: 20px 15px;
+    border-radius: 8px;
+    background-color: hsl(335, 74%, 95%);
+}
+
+.warning_icon {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    fill: hsl(18, 97%, 45%);
+}
+
+.warning_title {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.warning_content > p {
+    margin-top: 5px;
+    font-size: 14px;
 }
