@@ -301,7 +301,8 @@ hr {
 .tinfo_image {
     display: block;
     margin: auto;
-    max-width: 550px;
+    padding-right: 20px;
+    max-width: 100%;
     width: 100%;
     height: auto;
 }
@@ -316,6 +317,89 @@ hr {
     font-weight: 600;
     margin-top: 25px;
 }
+
+
+/* Quiz styles */
+#questionContainer {
+    max-width: 900px;
+    margin: auto;
+}
+
+.counter_title {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+#counter_number {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    background-color: var(--purple);
+    margin: auto;
+    margin-bottom: 30px;
+    border-radius: 100%;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+#mainQuestion {
+    font-size: 32px;
+    line-height: 1.2;
+    margin-bottom: 40px;
+    text-align: left;
+}
+
+
+.question_c {
+    margin-bottom: 15px;
+}
+
+.question_mc {
+    width: 100%;
+    display: inline-block;
+    font-size: 20px;
+    font-weight: 500;
+    background-color: white;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.question_mc:hover,
+.selected ~ .question_mc {
+    cursor: pointer;
+    background-color: var(--yellow);
+    color: black;
+}
+
+.question_mc:hover .question_mc-op,
+.selected + .question_mc .question_mc-op {
+    background-color: hsl(42, 100%, 42%);
+}
+
+.question_mc-op {
+    background-color: var(--purple);
+    color: white;
+    padding: 20px 20px;
+    display: inline-block;
+    margin-right: 20px;
+    font-weight: bold;
+}
+
+#next {
+    display: block;
+    margin-left: auto;
+}
+
+input[type="radio"] {
+    position: absolute;
+    visibility: hidden;
+}
+
+
 
 
 /* Buttons */
@@ -333,6 +417,11 @@ button, input[type="submit"] {
     border-radius: 50px;
     border: 0;
     text-transform: uppercase;
+}
+
+.primary-btn:disabled {
+    background-color: hsl(256, 100%, 75%);
+    cursor: not-allowed;
 }
 
 .full-w-center {
@@ -391,6 +480,8 @@ button, input[type="submit"] {
     color: var(--pink);
 }
 
+
+/* Special labels */
 .warning {
     display: flex;
     gap: 15px;
