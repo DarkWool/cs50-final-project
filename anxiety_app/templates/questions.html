@@ -2,21 +2,21 @@
     <p class="counter_title">
         QUESTION
     </p>
-    <div id="counter_number" data-total="{{ totalQuestions }}">
+    <div id="counter_number" data-total="{{ data['totalQuestions'] }}">
         {{ questionNumber }}
     </div>
 </div>
 <div class="question">
     <h1 id="mainQuestion">
-        {{ question.question }}
+        {{ data['question'] }}
     </h1>
 
-    {% for answer in question.answers %}
+    {% for key, value in data['answers'].items() %}
     <div class="question_c">
-        <input type="radio" name="question{{ questionNumber }}" id="q{{ loop.index }}" value="{{ question.answersValues[loop.index] }}">
+        <input type="radio" name="question{{ questionNumber }}" id="q{{ loop.index }}" value="{{ data['values'][key] }}">
         <label for="q{{ loop.index }}" class="question_mc">
             <span class="question_mc-op">{{ loop.index|getLetter }}</span>
-            {{ question.answers[loop.index] }}
+            {{ value }}
         </label>
     </div>
     {% endfor %}
