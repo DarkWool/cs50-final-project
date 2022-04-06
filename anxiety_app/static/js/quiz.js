@@ -59,7 +59,7 @@ async function getQuestions() {
     currQuestion++;
 
     if (currQuestion > QUESTIONS) {
-        let post = await fetch("/anxiety-test", {
+        let post = await fetch("/anxiety-test/results", {
             method: "POST",
             body: data
         });
