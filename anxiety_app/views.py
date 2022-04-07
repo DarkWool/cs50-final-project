@@ -84,7 +84,7 @@ def calculateResults(test):
 def results(id, hash):
     conn = connect_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT hash FROM results WHERE id = ?", (id,))
+    cursor.execute("SELECT test_result, hash FROM results WHERE id = ?", (id,))
     result = cursor.fetchone()
 
     # Users can get curious and experiment with urls, thats why you have to compare if the hash 
@@ -92,6 +92,14 @@ def results(id, hash):
     # If this had not been implemented then users would be able to look for other person results easily.
     if result != None and result["hash"] == hash:
         print("SUCCESS, TEST FOUND!")
+        if result["test_result"] <= 10:
+            return "Your score is low"
+        elif result["test_result"] <= 25:
+            return "Mild anxiety"
+        elif result["test_result"] <= 35:
+            return "High anxiety"
+        else:
+            return "Extreme anxiety, please seek help when possible"
     else:
         print("Test was not found or the hash did not match")
         return redirect(url_for("info"))
