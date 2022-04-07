@@ -1,4 +1,5 @@
 import sqlite3
+import shortuuid
 from anxiety_app import app
 from flask import render_template, request, redirect, url_for, make_response
 
@@ -71,12 +72,29 @@ def anxietyTest():
 
 
 @app.route("/<string:test>/results", methods=["POST"])
-def results(test):
+def calculateResults(test):
     if request.method == "POST":
         if request.mimetype == "multipart/form-data":
             url = getTestResult(test, request.form)
 
             return make_response({"url": url}, 200)
+
+
+@app.route("/results/<int:id>/<string:hash>")
+def results(id, hash):
+    conn = connect_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT hash FROM results WHERE id = ?", (id,))
+    result = cursor.fetchone()
+
+    # Users can get curious and experiment with urls, thats why you have to compare if the hash 
+    #  of the result with the id they specified is the same as the hash on the URL
+    # If this had not been implemented then users would be able to look for other person results easily.
+    if result != None and result["hash"] == hash:
+        print("SUCCESS, TEST FOUND!")
+    else:
+        print("Test was not found or the hash did not match")
+        return redirect(url_for("info"))
 
 
 def getTestResult(slug, formData):
@@ -111,15 +129,18 @@ def getTestResult(slug, formData):
             if answerValue in answers:
                 userResult += answerValue
 
+        # Generate a new UUID to associate with the id of the new test result
+        uuid = shortuuid.uuid()
+
         # Insert the results into the db and retrieve the id of the row inserted
         cursor.execute('''INSERT INTO results (test_id, test_result, hash) VALUES(?, ?, ?)''',
-            (testGeneralInfo["id"], userResult, "AHJSDKJH34K3HDK"))
+            (testGeneralInfo["id"], userResult, uuid))
         conn.commit()
         userResultId = cursor.lastrowid
 
     conn.close()
 
-    return f"results/{userResultId}/4r3ri3hiuhr3i2h2i"
+    return f"results/{userResultId}/{uuid}"
 
 
 def getTestData(slug, questionNumber):
