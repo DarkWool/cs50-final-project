@@ -1,8 +1,17 @@
+import os
 import sqlite3
 import shortuuid
+import flask_login
 from anxiety_app import app
-from flask import render_template, request, redirect, url_for, make_response
+from dotenv import load_dotenv
+from flask import render_template, request, redirect, url_for, make_response, flash
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_wtf import FlaskForm
+from wtforms import Form, BooleanField, StringField, PasswordField, validators
 
+load_dotenv()
+
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
 
 # Establish connection to the database
 def connect_db():
@@ -21,6 +30,134 @@ def init_db():
         db.close()
 
 init_db()
+
+
+# Login stuff
+login_manager = flask_login.LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
+
+class User(flask_login.UserMixin):
+    def __init__(self, id, username, email, password):
+        self.id = id
+        self.username = username
+        self.email = email
+        self.password = password
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    conn = connect_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+    userInfo = cursor.fetchone()
+    if userInfo is None:
+        return None
+    else:
+        return User(userInfo["id"], userInfo["username"], userInfo["email"], userInfo["password"]) 
+
+
+class SignUpForm(FlaskForm):
+    username = StringField("Username", [
+        validators.InputRequired(), 
+        validators.Length(min=4, max=20, message="Username must be at least 4 characters long and max 20")
+    ])
+
+    email = StringField("Email", [
+        validators.InputRequired(), 
+        validators.Email()
+    ])
+
+    password = PasswordField("Password", [
+        validators.InputRequired(),
+        validators.Regexp("^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).{8,24}$", 0,
+            '''Password must contain at least one lowercase and one capital letter, a number and the length must be 
+            between 8 and 24 characters long''')
+    ])
+
+    confirmPassword = PasswordField("Repeat Password", [
+        validators.InputRequired(),
+        validators.EqualTo("password", message="Passwords doesn't match")
+    ])
+
+class LoginForm(FlaskForm):
+    username = StringField("Username", [
+        validators.InputRequired()
+    ])
+    password = PasswordField("Password", [
+        validators.InputRequired(),
+    ])
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if flask_login.current_user.is_authenticated:
+        return redirect(url_for("dashboard"))
+
+    form = LoginForm()
+    if request.method == "POST" and form.validate_on_submit():
+        username = form.data["username"]
+        password = form.data["password"]
+
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, username, password FROM users WHERE username = ?", (username,))
+        userData = cursor.fetchone()
+
+        if userData is None:
+            flash("Invalid username or password", "error")
+            return redirect(url_for("login"))
+        elif check_password_hash(userData["password"], password):
+            user = load_user(userData["id"])
+            flask_login.login_user(user)
+            return redirect(url_for("dashboard"))
+
+    return render_template("signup.html", form=form)
+
+
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+    if flask_login.current_user.is_authenticated:
+        return redirect(url_for("dashboard"))
+
+    form = SignUpForm()
+    if request.method == "POST" and form.validate_on_submit():
+        # Get data from the form
+        username = form.data["username"]
+        email = form.data["email"]
+        password = generate_password_hash(form.data["password"], method="pbkdf2:sha256")
+
+        # Search if username or email specified do not exist on the Database
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute("SELECT username, email FROM users WHERE username = ? OR email = ?", (username, email))
+        duplicateUser = cursor.fetchone()
+
+        # It duplicateUser is None means that the username or email have not been taken yet
+        if duplicateUser is None:       
+            cursor.execute("INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
+                (username, email, password))
+            conn.commit()
+            id = cursor.lastrowid
+
+            # Create a new user object
+            user = User(id, username, email, password)
+
+            # Pass the User object to the login_user function
+            flask_login.login_user(user)
+            conn.close()
+            return redirect("/dashboard")
+
+        flash("Email / username already registered")
+        conn.close()
+        return redirect(url_for("signup"))
+    return render_template("signup.html", form=form)
+
+
+@app.route("/dashboard")
+@flask_login.login_required
+def dashboard():
+    return f"Hi, {flask_login.current_user.username}"
 
 
 # Convert numbers to letters (used in the quiz)

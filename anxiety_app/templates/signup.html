@@ -1,0 +1,42 @@
+{% macro render_field(field) %}
+{{ field.label }}
+{{ field(**kwargs)|safe }}
+    {% if field.errors %}
+    <ul class=errors>
+        {% for error in field.errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% endmacro %}
+{% extends "layout/base.html" %}
+{% block body %}
+<body>
+{% include "layout/header.html" %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class=flashes>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+    {% if request.path == "/signup" %}
+    <form method="post" action="{{ request.path }}">
+        {{ form.csrf_token }}
+        {{ render_field(form.username) }}
+        {{ render_field(form.email) }}
+        {{ render_field(form.password) }}
+        {{ render_field(form.confirmPassword) }}
+        <input type="submit" value="Sign up">
+    </form>
+    {% else %}
+    <form method="post" action="{{ request.path }}">
+        {{ form.csrf_token }}
+        {{ render_field(form.username) }}
+        {{ render_field(form.password) }}
+        <input type="submit" value="Login">
+    </form>
+    {% endif %}
+</body>{% endblock %}
