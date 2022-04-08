@@ -157,7 +157,14 @@ def signup():
 @app.route("/dashboard")
 @flask_login.login_required
 def dashboard():
-    return f"Hi, {flask_login.current_user.username}"
+    return render_template("users/dashboard.html")
+
+
+@app.route("/logout")
+@flask_login.login_required
+def logout():
+    flask_login.logout_user()
+    return redirect(url_for("index"))
 
 
 # Convert numbers to letters (used in the quiz)
