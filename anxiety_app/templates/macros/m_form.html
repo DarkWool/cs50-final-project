@@ -2,10 +2,12 @@
 {{ field.label }}
 {{ field(**kwargs)|safe }}
 {% if field.errors %}
-<ul class=errors>
-    {% for error in field.errors %}
-    <li>{{ error }}</li>
-    {% endfor %}
-</ul>
+<div class="auth_msg">
+    <ul>
+        {% for error in field.errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+</div>
 {% endif %}
 {% endmacro %}
