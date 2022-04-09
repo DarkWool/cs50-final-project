@@ -158,7 +158,7 @@ def signup():
         conn.close()
         flash("Email / username already registered")
         return redirect(url_for("signup"))
-    return render_template("signup.html", form=form)
+    return render_template("auth/signup.html", form=form)
 
 
 @app.route("/dashboard")
