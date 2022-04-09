@@ -1,8 +1,37 @@
 {% extends "layout/base.html" %}
 {% block title %}My account{% endblock %}
 {% block body %}
-<body>
-    <h1>Hi, {{ current_user.username }}!</h1>
-    <a href="{{ url_for('logout') }}">Log out</a>
+<body class="full-viewp">
+    {% include "layout/header.html" %}
+    <main class="dashboard">
+        <div>
+            <h1 class="dashboard_greet">Hi, {{ current_user.username }}!</h1>
+        </div>
+        <section class="dashboard_content">
+            <div class="dashboard_block yellow">
+                <h2>Account information</h2>
+                <div class="dashboard_accfield">
+                    <h3>Name:</h3>
+                    <p>{{ current_user.firstName }}</p>
+                </div>
+                <div class="dashboard_accfield">
+                    <h3>Email:</h3>
+                    <p>{{ current_user.email }}</p>
+                </div>
+                <div class="dashboard_accfield">
+                    <h3>Date created:</h3>
+                    <p>{{ date }}</p>
+                </div>
+            </div>
+            <div class="dashboard_block dark">
+                <h2>Test results</h2>
+                <a href="#" class="primary-btn">Check</a>
+            </div>
+            <div class="dashboard_block pink">
+                <h2>Change password</h2>
+                <a href="#" class="primary-btn">Change</a>
+            </div>
+        </section>
+    </main>
 </body>
 {% endblock %}

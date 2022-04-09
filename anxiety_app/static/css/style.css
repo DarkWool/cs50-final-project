@@ -7,6 +7,7 @@
 
 :root {
     --font-dark: hsl(0, 0%, 12%);
+    --dark: hsl(0, 0%, 12%);
     --yellow: hsl(42, 100%, 50%);
     --pink: hsl(323, 90%, 58%);
     --purple: hsl(256, 100%, 50%);
@@ -27,6 +28,10 @@ a {
     display: inline-block;
 }
 
+header {
+    margin-bottom: 20px;
+}
+
 h1, h2, h3, h4, h5, h6, button {
     font-family: Poppins, sans-serif;
 }
@@ -42,7 +47,8 @@ h2 {
 h3 {
     font-size: 36px;
     font-weight: 700;
-    text-align: center;
+
+    /* text-align: center; */
     margin-bottom: 10px;
 }
 
@@ -354,7 +360,6 @@ hr {
     text-align: left;
 }
 
-
 .question_c {
     margin-bottom: 15px;
 }
@@ -400,6 +405,83 @@ input[type="radio"] {
 }
 
 
+/* Dashboard styles */
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    margin-top: 100px;
+}
+
+.dashboard_greet {
+    margin-bottom: 30px;
+    font-family: Inter;
+    font-weight: 200;
+    font-size: 80px;
+}
+
+.dashboard_content {
+    display: flex;
+    gap: 20px;
+}
+
+.dashboard_block {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-basis: 100%;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+    border-radius: 10px;
+    box-shadow: 0px 15px 24px 0px hsla(248, 100%, 50%, 0.059);
+    transition: transform 0.2s ease-in-out;
+}
+
+.dashboard_block:hover {
+    transform: translateY(-12px);
+}
+
+.dashboard_block > h2:first-child {
+    text-align: center;
+    line-height: 1;
+    margin-bottom: 25px;
+}
+
+.dashboard_block.yellow {
+    background-color: var(--yellow);
+}
+
+.dashboard_block.dark {
+    background-color: var(--dark);
+    color: white;
+}
+
+.dashboard_block.pink {
+    background-color: var(--pink);
+}
+
+.dashboard_accfield {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.dashboard_accfield > h3 {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.dashboard_accfield > p {
+    margin-left: 15px;
+}
+
+.dashboard_accfield > p,
+.dashboard_accfield > h3 {
+    font-size: 20px;
+}
 
 
 /* Buttons */

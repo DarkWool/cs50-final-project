@@ -38,9 +38,10 @@ login_manager.init_app(app)
 login_manager.login_view = "login"
 
 class User(flask_login.UserMixin):
-    def __init__(self, id, username, email, password):
+    def __init__(self, id, username, firstName, email, password):
         self.id = id
         self.username = username
+        self.firstName = firstName
         self.email = email
         self.password = password
 
@@ -54,13 +55,18 @@ def load_user(user_id):
     if userInfo is None:
         return None
     else:
-        return User(userInfo["id"], userInfo["username"], userInfo["email"], userInfo["password"]) 
+        return User(userInfo["id"], userInfo["username"], userInfo["first_name"], userInfo["email"], userInfo["password"]) 
 
 
 class SignUpForm(FlaskForm):
     username = StringField("Username", [
         validators.InputRequired(), 
         validators.Length(min=4, max=20, message="Username must be at least 4 characters long and max 20")
+    ])
+
+    firstName = StringField("First Name", [
+        validators.InputRequired(),
+        validators.Length(min=2, max=20),
     ])
 
     email = StringField("Email", [
@@ -101,7 +107,7 @@ def login():
 
         conn = connect_db()
         cursor = conn.cursor()
-        cursor.execute("SELECT id, username, password FROM users WHERE username = ?", (username,))
+        cursor.execute("SELECT id, password FROM users WHERE username = ?", (username,))
         userData = cursor.fetchone()
 
         if userData is None:
@@ -124,6 +130,7 @@ def signup():
     if request.method == "POST" and form.validate_on_submit():
         # Get data from the form
         username = form.data["username"]
+        firstName = form.data["firstName"]
         email = form.data["email"]
         password = generate_password_hash(form.data["password"], method="pbkdf2:sha256")
 
@@ -135,21 +142,21 @@ def signup():
 
         # It duplicateUser is None means that the username or email have not been taken yet
         if duplicateUser is None:       
-            cursor.execute("INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
-                (username, email, password))
+            cursor.execute("INSERT INTO users (username, first_name, email, password) VALUES (?, ?, ?, ?)",
+                (username, firstName, email, password))
             conn.commit()
             id = cursor.lastrowid
 
             # Create a new user object
-            user = User(id, username, email, password)
+            user = User(id, username, firstName, email, password)
 
             # Pass the User object to the login_user function
             flask_login.login_user(user)
             conn.close()
             return redirect("/dashboard")
 
-        flash("Email / username already registered")
         conn.close()
+        flash("Email / username already registered")
         return redirect(url_for("signup"))
     return render_template("signup.html", form=form)
 
@@ -157,7 +164,13 @@ def signup():
 @app.route("/dashboard")
 @flask_login.login_required
 def dashboard():
-    return render_template("users/dashboard.html")
+    conn = connect_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT date_created FROM users WHERE id = ?", (flask_login.current_user.id,))
+    date = cursor.fetchone()["date_created"]
+    conn.close()
+
+    return render_template("users/dashboard.html", date=date)
 
 
 @app.route("/logout")
