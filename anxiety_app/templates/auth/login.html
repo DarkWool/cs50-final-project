@@ -1,0 +1,40 @@
+{% import "macros/m_form.html" as m %}
+{% extends "layout/base.html" %}
+{% block title %}My account{% endblock %}
+{% block body %}
+<body class="full-viewp">
+    {% include "layout/header.html" %}
+    <main>
+        <section class="auth">
+            <div class="auth_title">
+                <h1>Login</h1>
+            </div>
+                        {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        <div class="auth_msg">
+                            <ul class=flashes>
+                                {% for message in messages %}
+                                <li>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                        {% endwith %}
+            <form method="post" action="{{ request.path }}">
+                {{ form.csrf_token }}
+                <div class="auth_field">
+                    {{ m.render_field(form.username) }}
+                </div>
+                <div class="auth_field">
+                    {{ m.render_field(form.password) }}
+                </div>
+                <input type="submit" class="primary-btn auth" value="Login">
+            </form>
+            <div class="auth_extra">
+                New here?
+                <a href="{{ url_for('signup') }}" class="pink">Sign up</a>
+            </div>
+        </section>
+    </main>
+</body>
+{% endblock %}

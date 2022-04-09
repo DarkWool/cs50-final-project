@@ -118,7 +118,7 @@ def login():
             flask_login.login_user(user)
             return redirect(url_for("dashboard"))
 
-    return render_template("signup.html", form=form)
+    return render_template("auth/login.html", form=form)
 
 
 @app.route("/signup", methods=["GET", "POST"])

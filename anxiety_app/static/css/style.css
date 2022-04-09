@@ -484,6 +484,66 @@ input[type="radio"] {
 }
 
 
+/* Auth (login, register */
+.auth {
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+.auth_title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.auth_field {
+    width: 100%;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.auth_field > label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.auth_field > input {
+    width: 100%;
+    padding: 15px 15px;
+    border-radius: 8px;
+    border: 0;
+    font-size: 16px;
+    background-color: hsl(256, 100%, 97.1%);
+}
+
+.auth_extra {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.primary-btn.auth {
+    width: 100%;
+    box-shadow: none;
+}
+
+.auth_msg {
+    margin-bottom: 15px;
+    text-align: center;
+    padding: 20px 15px;
+    background-color: hsl(335, 74%, 95%);
+    border-radius: 8px;
+}
+
+.auth_msg > ul {
+    list-style: none;
+    font-size: 14px;
+    padding: 0;
+    margin: auto;
+}
+
+
 /* Buttons */
 button, input[type="submit"] {
     cursor: pointer;
@@ -559,6 +619,10 @@ button, input[type="submit"] {
 }
 
 .accent-pink {
+    color: var(--pink);
+}
+
+.pink {
     color: var(--pink);
 }
 
