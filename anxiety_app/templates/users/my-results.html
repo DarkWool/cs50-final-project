@@ -9,43 +9,20 @@
             <p><span class="t-bold">Tip: </span>If you click on the 'check' button you will see the original page of each one of your results.</p>
         </div>
         <div class="myr_results">
-            <!-- Placeholder data -->
+            {% for title, value, id, date, result, total in userTests %}
             <article class="myr_block">
                 <div class="myr_block-info">
-                    <h2>Anxiety Test</h2>
-                    <p><span class="t-semibold">Result:</span> High Anxiety</p>
+                    <h2>{{ title }}</h2>
+                    <p><span class="t-semibold">Result:</span> {{ result }} / {{ total }}</p>
                 </div>
                 <div class="myr_block-date">
-                    2022/04/22
+                    {{ date }}
                 </div>
                 <div class="myr_block-check">
-                    <button type="button" class="sec-btn">CHECK</button>
+                    <a class="sec-btn" href="results/{{ id }}/{{ value }}" target="_blank">CHECK</a>
                 </div>
             </article>
-            <article class="myr_block">
-                <div class="myr_block-info">
-                    <h2>Anxiety Test</h2>
-                    <p><span class="t-semibold">Result:</span> High Anxiety</p>
-                </div>
-                <div class="myr_block-date">
-                    2022/04/22
-                </div>
-                <div class="myr_block-check">
-                    <button type="button" class="sec-btn">CHECK</button>
-                </div>
-            </article>
-            <article class="myr_block">
-                <div class="myr_block-info">
-                    <h2>Anxiety Test</h2>
-                    <p><span class="t-semibold">Result:</span> High Anxiety</p>
-                </div>
-                <div class="myr_block-date">
-                    2022/04/22
-                </div>
-                <div class="myr_block-check">
-                    <button type="button" class="sec-btn">CHECK</button>
-                </div>
-            </article>
+            {% endfor %}
         </div>
     </section>
 </body>
