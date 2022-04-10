@@ -1,0 +1,52 @@
+{% extends "layout/base.html" %}
+{% block title %}My Tests Results{% endblock %}
+{% block body %}
+<body>
+    {% include "layout/header.html" %}
+    <section class="myr">
+        <div class="myr_header-sec">
+            <h1 class="myr_main-title">Your tests results</h1>
+            <p><span class="t-bold">Tip: </span>If you click on the 'check' button you will see the original page of each one of your results.</p>
+        </div>
+        <div class="myr_results">
+            <!-- Placeholder data -->
+            <article class="myr_block">
+                <div class="myr_block-info">
+                    <h2>Anxiety Test</h2>
+                    <p><span class="t-semibold">Result:</span> High Anxiety</p>
+                </div>
+                <div class="myr_block-date">
+                    2022/04/22
+                </div>
+                <div class="myr_block-check">
+                    <button type="button" class="sec-btn">CHECK</button>
+                </div>
+            </article>
+            <article class="myr_block">
+                <div class="myr_block-info">
+                    <h2>Anxiety Test</h2>
+                    <p><span class="t-semibold">Result:</span> High Anxiety</p>
+                </div>
+                <div class="myr_block-date">
+                    2022/04/22
+                </div>
+                <div class="myr_block-check">
+                    <button type="button" class="sec-btn">CHECK</button>
+                </div>
+            </article>
+            <article class="myr_block">
+                <div class="myr_block-info">
+                    <h2>Anxiety Test</h2>
+                    <p><span class="t-semibold">Result:</span> High Anxiety</p>
+                </div>
+                <div class="myr_block-date">
+                    2022/04/22
+                </div>
+                <div class="myr_block-check">
+                    <button type="button" class="sec-btn">CHECK</button>
+                </div>
+            </article>
+        </div>
+    </section>
+</body>
+{% endblock %}

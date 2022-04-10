@@ -172,6 +172,11 @@ def dashboard():
 
     return render_template("users/dashboard.html", date=date)
 
+@app.route("/my-results")
+@flask_login.login_required
+def myresults():
+    return render_template("users/my-results.html")
+
 
 @app.route("/logout")
 @flask_login.login_required
