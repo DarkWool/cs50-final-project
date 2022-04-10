@@ -246,8 +246,17 @@ def calculateResults(test):
 def results(id, hash):
     conn = connect_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT test_result, hash FROM results WHERE id = ?", (id,))
+    cursor.execute("SELECT test_result, hash, user_id FROM results WHERE id = ?", (id,))
     result = cursor.fetchone()
+
+    # Check if the test result is private (for logged users)
+    if result["user_id"] is not None:
+        try:
+            userId = int(flask_login.current_user.get_id())
+            if userId != result["user_id"]:
+                return redirect(url_for("info"))
+        except:
+            return redirect(url_for("info"))
 
     # Users can get curious and experiment with urls, thats why you have to compare if the hash 
     #  of the result with the id they specified is the same as the hash on the URL
@@ -302,9 +311,14 @@ def getTestResult(slug, formData):
         # Generate a new UUID to associate with the id of the new test result
         uuid = shortuuid.uuid()
 
-        # Insert the results into the db and retrieve the id of the row inserted
-        cursor.execute('''INSERT INTO results (test_id, test_result, hash) VALUES(?, ?, ?)''',
+        if flask_login.current_user.is_authenticated:
+            cursor.execute('''INSERT INTO results (test_id, test_result, hash, user_id) VALUES(?, ?, ?, ?)''',
+            (testGeneralInfo["id"], userResult, uuid, flask_login.current_user.id))
+        else:
+            # Insert the results into the db and retrieve the id of the row inserted
+            cursor.execute('''INSERT INTO results (test_id, test_result, hash) VALUES(?, ?, ?)''',
             (testGeneralInfo["id"], userResult, uuid))
+
         conn.commit()
         userResultId = cursor.lastrowid
 
