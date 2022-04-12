@@ -8,9 +8,11 @@
 :root {
     --font-dark: hsl(0, 0%, 12%);
     --dark: hsl(0, 0%, 12%);
+    --grey: hsl(210, 60%, 98%);
     --yellow: hsl(42, 100%, 50%);
     --pink: hsl(323, 90%, 58%);
     --purple: hsl(256, 100%, 50%);
+    --font-36: 36px;
 }
 
 /* General styles */
@@ -28,27 +30,22 @@ a {
     display: inline-block;
 }
 
-header {
-    margin-bottom: 20px;
-}
-
 h1, h2, h3, h4, h5, h6, button {
     font-family: Poppins, sans-serif;
+    line-height: 1;
 }
 
 h1 {
-    font-size: 48px;
+    font-size: 46px;
 }
 
 h2 {
-    font-size: 36px;
+    font-size: var(--font-36);
 }
 
 h3 {
-    font-size: 36px;
+    font-size: var(--font-36);
     font-weight: 700;
-
-    /* text-align: center; */
     margin-bottom: 10px;
 }
 
@@ -71,30 +68,62 @@ hr {
 }
 
 /* Header styles */
-.main-nav {
+.m-header {
+    display: flex;
+    padding: 10px 50px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.m-header > nav {
+    margin: auto 0;
+}
+
+.m-header_logo {
+    margin-right: auto;
+}
+
+.m-header_auth {
+    display: flex;
+    margin: auto 0 auto auto;
+    gap: 20px;
+}
+
+.menu_nav {
     display: flex;
     justify-content: center;
     padding: 0;
     gap: 40px;
+    font-size: 16px;
     list-style: none;
 }
 
-.main-nav > li > a {
+.menu_anchor {
     padding: 15px;
-    font-size: 16px;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--font-dark);
+    transition: color 0.2s ease;
 }
+
+.menu_anchor:hover {
+    color: var(--pink);
+}
+
+.menu_anchor:visited {
+    color: none;
+}
+
 
 /* Main information section */
 #main {
     display: flex;
     align-items: center;
-    margin: 50px auto;
+    margin: 4.5em auto;
+    gap: 20px;
 }
 
 .main_title {
-    font-size: 48px;
+    line-height: 1;
     text-align: center;
     margin-bottom: 20px;
     position: relative;
@@ -115,7 +144,6 @@ hr {
 
 .main_subtitle {
     margin: 0 0 20px;
-    font-size: 18px;
     line-height: 1.2;
 }
 
@@ -123,13 +151,13 @@ hr {
 .quote {
     background-color: hsl(248, 34%, 17%);
     color: white;
+    padding: 8em 0;
 }
 
 .quote_c {
     max-width: 700px;
     margin: auto;
     position: relative;
-    padding: 6em 0;
 }
 
 .quote_title {
@@ -138,7 +166,7 @@ hr {
 }
 
 .quote_text {
-    font-size: 20px;
+    font-size: 18px;
     font-style: italic;
     margin-bottom: 20px;
     line-height: 1.3;
@@ -221,13 +249,12 @@ hr {
 
 /* Process section */
 .process {
-    padding: 6em 0;
+    padding: 8em 0;
     background-color: hsl(210, 60%, 98%);
 }
 
 .process_subtitle {
     font-family: Poppins, sans-serif;
-    font-size: 20px;
     font-weight: 500;
     text-align: center;
     margin-bottom: 3em;
@@ -241,6 +268,7 @@ hr {
 
 .steps_item {
     position: relative;
+    width: 100%;
     padding: 40px;
     background-color: white;
     border-radius: 7px;
@@ -276,7 +304,7 @@ hr {
     background-color: var(--pink);
     color: white;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 18px;
     border-radius: 100%;
     width: 30px;
     position: absolute;
@@ -286,7 +314,7 @@ hr {
     top: -15px;
     left: -15px;
     height: 30px;
-    padding: 21px;
+    padding: 17px;
 }
 
 
@@ -296,12 +324,14 @@ hr {
 .tinfo {
     display: flex;
     max-width: 1300px;
+    padding: 24px 30px;
     margin: auto;
 }
 
 .tinfo_title {
-    text-align: center;
     margin-bottom: 10px;
+    font-size: 36px;
+    text-align: center;
 }
 
 .tinfo_image {
@@ -314,7 +344,7 @@ hr {
 }
 
 .tinfo_content {
-    padding: 50px;
+    padding: 50px 0 50px 50px;
     border-radius: 20px;
 }
 
@@ -327,13 +357,13 @@ hr {
 
 /* Quiz styles */
 #questionContainer {
-    max-width: 900px;
+    max-width: 800px;
     margin: auto;
 }
 
 .counter_title {
     font-size: 20px;
-    font-weight: bold;
+    font-weight: 600;
     text-align: center;
     margin-bottom: 5px;
 }
@@ -397,6 +427,7 @@ hr {
 #next {
     display: block;
     margin-left: auto;
+    font-size: 18px;
 }
 
 input[type="radio"] {
@@ -412,15 +443,17 @@ input[type="radio"] {
     flex-grow: 1;
     width: 100%;
     max-width: 1300px;
-    margin: 0 auto;
-    margin-top: 100px;
+    padding: 0 30px;
+    margin: 100px auto 150px;
+
+    /* margin-top: 100px; */
 }
 
 .dashboard_greet {
     margin-bottom: 30px;
     font-family: Inter;
     font-weight: 200;
-    font-size: 80px;
+    font-size: 64px;
 }
 
 .dashboard_content {
@@ -447,21 +480,13 @@ input[type="radio"] {
 
 .dashboard_block > h2:first-child {
     text-align: center;
+    font-size: 24px;
     line-height: 1;
     margin-bottom: 25px;
 }
 
-.dashboard_block.yellow {
-    background-color: var(--yellow);
-}
-
-.dashboard_block.dark {
-    background-color: var(--dark);
+.dashboard_block.dark-bg {
     color: white;
-}
-
-.dashboard_block.pink {
-    background-color: var(--pink);
 }
 
 .dashboard_accfield {
@@ -480,7 +505,7 @@ input[type="radio"] {
 
 .dashboard_accfield > p,
 .dashboard_accfield > h3 {
-    font-size: 20px;
+    font-size: 16px;
 }
 
 
@@ -499,7 +524,7 @@ input[type="radio"] {
     max-width: 400px;
 }
 
-.auth_title h1 {
+.auth_title {
     text-align: center;
     font-size: 32px;
     margin-bottom: 20px;
@@ -508,7 +533,7 @@ input[type="radio"] {
 .auth_field {
     width: 100%;
     margin-bottom: 20px;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .auth_field label {
@@ -522,13 +547,14 @@ input[type="radio"] {
     padding: 15px 15px;
     border-radius: 8px;
     border: 0;
-    font-size: 16px;
+    font-size: 14px;
     background-color: hsl(256, 100%, 97.1%);
 }
 
 .auth_extra {
     text-align: center;
     margin: 20px 0;
+    font-size: 14px;
 }
 
 .primary-btn.auth_btn {
@@ -558,7 +584,7 @@ input[type="radio"] {
 /* My results section (only registered users) */
 .myr {
     max-width: 1300px;
-    margin: 100px auto 0;
+    margin: 100px auto 100px;
 }
 
 .myr_header-sec {
@@ -589,34 +615,20 @@ input[type="radio"] {
     background-color: var(--pink);
 }
 
-/* .myr_block:nth-child(3n-1) {
-    background-color: var(--pink);
-} */
-
-/*
-.myr_block:nth-child(3n+0) {
-    background-color: var(--purple);
-} */
-
 .myr_block h2 {
     font-family: Inter;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: bold;
+}
+
+.myr_block p:first-child {
     margin-bottom: 5px;
-}
-
-.myr_block p {
-    font-size: 16px;
-}
-
-.myr_block-date {
-    margin: auto;
-    padding: 0 10px;
 }
 
 .myr_block-check {
     margin-top: auto;
     margin-bottom: auto;
+    margin-left: auto;
 }
 
 
@@ -627,14 +639,21 @@ button, input[type="submit"] {
 
 .primary-btn {
     padding: 20px 30px;
-    font-size: 18px;
     font-weight: 700;
     background-color: var(--purple);
     color: white;
-    box-shadow: 0px 8px 35px rgba(66, 0, 255, 0.3);
+    box-shadow: 0px 8px 35px rgba(66, 0, 255, 0.2);
     border-radius: 50px;
     border: 0;
     text-transform: uppercase;
+    transition-property: background-color,
+        color;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
+}
+
+.primary-btn:hover {
+    background-color: hsl(256, 100%, 65%);
 }
 
 .primary-btn:disabled {
@@ -671,7 +690,10 @@ button, input[type="submit"] {
 /* Utilities */
 .content-width {
     max-width: 1300px;
-    margin: auto;
+    padding-left: 30px;
+    padding-right: 30px;
+    margin-right: auto;
+    margin-left: auto;
 }
 
 .full-cg {
@@ -684,8 +706,17 @@ button, input[type="submit"] {
     flex-direction: column;
 }
 
+.img-responsive {
+    max-width: 100%;
+    height: auto;
+}
+
 .m-a {
     margin: auto;
+}
+
+.m-a-v {
+    margin: auto 0;
 }
 
 .col-60 {
@@ -724,8 +755,28 @@ button, input[type="submit"] {
     font-weight: bold;
 }
 
+.t-small {
+    font-size: 14px;
+}
+
 .t-semibold {
     font-weight: 500;
+}
+
+.yellow-bg {
+    background-color: var(--yellow);
+}
+
+.pink-bg {
+    background-color: var(--pink);
+}
+
+.dark-bg {
+    background-color: var(--dark);
+}
+
+.grey-bg {
+    background-color: var(--grey);
 }
 
 
@@ -755,4 +806,341 @@ button, input[type="submit"] {
 .warning_content > p {
     margin-top: 5px;
     font-size: 14px;
+}
+
+
+@media only screen and (max-width: 1280px) {
+    :root {
+        --font-36: 32px;
+    }
+
+    .menu_nav {
+        font-size: 14px;
+    }
+
+    /* Home styles */
+    .main_title {
+        font-size: 36px;
+    }
+
+    .main_subtitle {
+        font-size: 14px;
+    }
+
+    .process,
+    .quote_c {
+        padding: 5em 0;
+    }
+
+    .quote_c {
+        max-width: 500px;
+    }
+
+    .quote_text {
+        font-size: 16px;
+    }
+
+    .quote_author {
+        font-size: 18px;
+    }
+
+    .primary-btn {
+        padding: 18px 25px;
+        font-size: 14px;
+    }
+
+
+    /* Questions */
+    #questionContainer {
+        padding: 0 30px;
+    }
+
+    #mainQuestion {
+        font-size: 24px;
+    }
+
+    .question_mc {
+        font-size: 18px;
+    }
+
+    .question_mc-op {
+        padding: 15px;
+    }
+
+    #next {
+        font-size: 16px;
+        padding: 16px 25px;
+    }
+
+
+    /* Dashboard */
+    .dashboard {
+        margin-top: unset;
+    }
+
+    .dashboard_content {
+        flex-direction: column;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .dashboard_block {
+        padding: 40px;
+    }
+
+    .dashboard_greet {
+        font-size: 72px;
+        margin-bottom: 30px;
+    }
+
+
+    /* My results page */
+    .myr {
+        margin: 0;
+        padding: 0 30px;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    .steps {
+        flex-direction: column;
+        width: 50ch;
+        margin: auto;
+    }
+
+    .steps_item:not(:last-child)::after {
+        width: 5px;
+        height: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: -20px;
+        top: inherit;
+    }
+
+
+    /* Test information section */
+    .tinfo {
+        flex-direction: column-reverse;
+        margin: 0 auto 20px;
+    }
+
+    .tinfo_content {
+        padding: 0;
+        font-size: 14px;
+    }
+
+    .tinfo .col-50 {
+        width: 100%;
+    }
+
+    /* Sign up page */
+    .auth-login, .auth-signup {
+        margin: auto;
+    }
+
+    /* Dashboard */
+    .dashboard_content {
+        max-width: 350px;
+        width: 100%;
+    }
+
+    .dashboard-greet {
+        font-size: 56px;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    :root {
+        --font-36: 24px;
+    }
+
+    .m-header {
+        margin-bottom: inherit;
+    }
+
+    .m-header_logo {
+        margin-right: auto;
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+
+    .m-header_logo > img {
+        max-width: 100px;
+    }
+
+    #main {
+        flex-direction: column;
+    }
+
+    #main .col-40 {
+        width: 100%;
+    }
+
+    .content-width {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .main_title {
+        font-size: 28px;
+    }
+
+    .quote {
+        padding: 0;
+    }
+
+    .quote_c {
+        max-width: 100%;
+        padding: 5em 10px;
+    }
+
+    .quote_text {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+
+    .quote_author {
+        font-size: 16px;
+    }
+
+    .process {
+        padding: 4em 10px;
+    }
+
+    .steps {
+        width: 100%;
+    }
+
+    .steps_item {
+        padding: 25px;
+    }
+
+    .steps_item > h4 {
+        font-size: 16px;
+    }
+
+    .steps_counter {
+        padding: 16px;
+        font-size: 14px;
+    }
+
+    .steps_icon {
+        width: 56px;
+        height: 56px;
+    }
+
+    .steps_title {
+        font-size: 16px;
+    }
+
+
+    /* Test information section */
+    .tinfo {
+        padding: 0 10px;
+    }
+
+    .tinfo .col-50 {
+        width: 100%;
+    }
+
+
+    /* Questions */
+    #counter_number {
+        margin-bottom: 20px;
+        width: 34px;
+        height: 34px;
+        font-size: 16px;
+    }
+
+    #mainQuestion {
+        margin-bottom: 20px;
+        font-size: 20px;
+    }
+
+    #questionContainer {
+        padding: 0 10px;
+    }
+
+    .counter_title {
+        font-size: 16px;
+    }
+
+    .question_mc-op {
+        padding: 15px;
+    }
+
+    .question_mc {
+        font-size: 16px;
+    }
+
+    #next {
+        padding: 15px 25px;
+    }
+
+
+    /* Sign up page */
+    .auth-signup {
+        padding: 5px 30px;
+    }
+
+    .auth_title {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .auth_field {
+        margin-bottom: 14px;
+    }
+
+
+    /* Dashboard */
+    .dashboard {
+        padding: 0 15px;
+    }
+
+    .dashboard_content {
+        gap: 15px;
+    }
+
+    .dashboard_greet {
+        font-size: 46px;
+        margin-bottom: 20px;
+    }
+
+    .dashboard_block {
+        padding: 30px;
+    }
+
+
+    /* My results page */
+    .myr {
+        padding: 0 10px;
+    }
+
+    .myr_header-sec {
+        margin-bottom: 25px;
+    }
+
+    .myr_main-title {
+        font-size: 28px;
+    }
+
+    .myr_header-sec p {
+        font-size: 14px;
+    }
+
+    .myr_block {
+        padding: 20px;
+        margin: 0 auto 10px;
+    }
+
+    .myr_block h2 {
+        font-size: 16px;
+        line-height: 1.2;
+    }
+
+    .sec-btn {
+        margin-left: 10px;
+        font-size: 14px;
+    }
 }

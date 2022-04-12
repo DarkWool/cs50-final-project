@@ -4,45 +4,43 @@
 {% block body %}
 <body class="full-viewp">
     {% include "layout/header.html" %}
-    <main>
-        <section class="auth-signup">
-            <div class="auth_title">
-                <h1 class="auth_title">Join us!</h1>
+    <section class="auth-signup">
+        <div>
+            <h1 class="auth_title">Join us!</h1>
+        </div>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="auth_msg">
+            <ul>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        {% endwith %}
+        <form method="post" action="{{ request.path }}">
+            {{ form.csrf_token }}
+            <div class="auth_field">
+                {{ m.render_field(form.username) }}
             </div>
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <div class="auth_msg">
-                <ul>
-                    {% for message in messages %}
-                    <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
+            <div class="auth_field">
+                {{ m.render_field(form.firstName) }}
             </div>
-            {% endif %}
-            {% endwith %}
-            <form method="post" action="{{ request.path }}">
-                {{ form.csrf_token }}
-                <div class="auth_field">
-                    {{ m.render_field(form.username) }}
-                </div>
-                <div class="auth_field">
-                    {{ m.render_field(form.firstName) }}
-                </div>
-                <div class="auth_field">
-                    {{ m.render_field(form.email) }}
-                </div>
-                <div class="auth_field">
-                    {{ m.render_field(form.password) }}
-                </div>
-                <div class="auth_field">
-                    {{ m.render_field(form.confirmPassword) }}
-                </div>
-                <input type="submit" class="primary-btn auth_btn" value="Sign Up">
-            </form>
-            <div class="auth_extra">
-                Already have an account?
-                <a href="{{ url_for('login') }}" class="pink">Log in</a>
+            <div class="auth_field">
+                {{ m.render_field(form.email) }}
             </div>
-        </section>
-    </main>
+            <div class="auth_field">
+                {{ m.render_field(form.password) }}
+            </div>
+            <div class="auth_field">
+                {{ m.render_field(form.confirmPassword) }}
+            </div>
+            <input type="submit" class="primary-btn auth_btn" value="Sign Up">
+        </form>
+        <div class="auth_extra">
+            Already have an account?
+            <a href="{{ url_for('login') }}" class="pink">Log in</a>
+        </div>
+    </section>
 </body>{% endblock %}

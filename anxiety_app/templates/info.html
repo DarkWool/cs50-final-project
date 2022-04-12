@@ -8,7 +8,7 @@
     <main class="full-cg">
         <section class="tinfo">
             <div class="col-50 m-a">
-                <img src="#" class="tinfo_image" alt="">
+                <img src="{{ url_for('static', filename='imgs/letsgo_02.png') }}" class="img-responsive" alt="">
             </div>
             <div class="col-50 tinfo_content">
                 <h1 class="tinfo_title">LET’S <span class="accent-pink">DO IT!</span></h1>
@@ -49,5 +49,6 @@
             </div>
         </section>
     </main>
+    {% include "layout/footer.html" %}
 </body>
 {% endblock %}

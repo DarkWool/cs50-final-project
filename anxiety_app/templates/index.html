@@ -7,19 +7,18 @@
 {% include "layout/header.html" %}
     <section id="main" class="content-width">
         <div class="col-40">
-            <h1 class="main_title" data-alt-title="STOP ANXIETY">Your journey finally starts <span class="accent">here</span></h1>
+            <h1 class="main_title" data-alt-title="HOLD ON">Your journey finally starts <span class="accent-purple">here</span></h1>
             <p class="main_subtitle">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Amet ornare malesuada vel, amet. Vel amet lobortis
-                volutpat
-                justo, morbi. Phasellus odio et turpis in fermentum rutrum mattis sit quisque. Sit natoque orci eu augue.
-                Diam arcu ut
-                adipiscing est et sed.
+                Living with anxiety and all its consequences can become a disabling problem in your day to day but life does not have to
+                end there. The most important step to be able to take action against the problem is to know and accept what you are
+                dealing with and a single test can represent the beginning of a better life.
             </p>
             <div class="txt-c">
                 <a href="{{ url_for('info') }}" class="primary-btn">Take the test</a>
             </div>
         </div>
         <div class="col-60">
+            <img src="{{ url_for('static', filename='imgs/journey_01.png') }}" class="img-responsive">
         </div>
     </section>
     <section class="quote">
@@ -45,7 +44,7 @@
     </section>
     <section class="process">
         <div class="content-width">
-            <h3>What is <span class="accent">the process</span>?</h3>
+            <h3 class="txt-c">What is <span class="accent-purple">the process</span>?</h3>
             <p class="process_subtitle">How and why it’s important for you to take the anxiety test</p>
             <div class="steps">
                 <div class="steps_item">
@@ -56,14 +55,11 @@
                         <path
                             d="M22 13v-13h-20v24h8.409c4.857 0 3.335-8 3.335-8 3.009.745 8.256.419 8.256-3zm-4-7h-12v-1h12v1zm0 3h-12v-1h12v1zm0 3h-12v-1h12v1zm-2.091 6.223c2.047.478 4.805-.279 6.091-1.179-1.494 1.998-5.23 5.708-7.432 6.881 1.156-1.168 1.563-4.234 1.341-5.702z" />
                     </svg>
-                    <h4 class="process-title">ANSWER WITH HONESTY</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Amet ornare malesuada vel, amet. Vel amet
-                        lobortis volutpat
-                        justo, morbi. Phasellus odio et turpis in fermentum rutrum mattis sit quisque. Sit natoque orci eu
-                        augue. Diam arcu ut
-                        adipiscing est et sed. Ornare tellus enim, non mus. Morbi et nullam sem dignissim velit placerat
-                        vestibulum. Et
-                        condimentum malesuada eget mauris nulla amet. Aliquam pharetra, viverra malesuada et, amet.</p>
+                    <h4 class="process-title">START THE TEST</h4>
+                    <p class="t-small">
+                        Before you can start your test it's necessary that you carefully read the general information on the test page, there we specified that the test you are about to perform should NOT serve as a replacement for a real diagnosis
+                        made by a trained professional, however, results can help you to take the next step on your journey of beating anxiety.
+                    </p>
                 </div>
                 <div class="steps_item">
                     <span class="steps_counter">
@@ -73,14 +69,11 @@
                         <path
                             d="M23.949 13c-.509 6.158-5.66 11-11.949 11-6.627 0-12-5.373-12-12 0-6.29 4.842-11.44 11-11.95v12.95h12.949zm-10.949-2h10.949c-.481-5.828-5.122-10.467-10.949-10.95v10.95z" />
                     </svg>
-                    <h4 class="process-title">BE ACCOUNTABLE!</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Amet ornare malesuada vel, amet. Vel amet
-                        lobortis volutpat
-                        justo, morbi. Phasellus odio et turpis in fermentum rutrum mattis sit quisque. Sit natoque orci eu
-                        augue. Diam arcu ut
-                        adipiscing est et sed. Ornare tellus enim, non mus. Morbi et nullam sem dignissim velit placerat
-                        vestibulum. Et
-                        condimentum malesuada eget mauris nulla amet. Aliquam pharetra, viverra malesuada et, amet.</p>
+                    <h4 class="process-title">ANSWER THE QUESTIONS</h4>
+                    <p class="t-small">
+                        We will ask you to answer 21 questions with complete honesty, each one of them must be answered in the shortest possible
+                        time. It's important that you try not to over analyze the questions, do not think too much about it.
+                    </p>
                 </div>
                 <div class="steps_item">
                     <span class="steps_counter">
@@ -90,19 +83,16 @@
                         <path
                             d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-1.25 17.292l-4.5-4.364 1.857-1.858 2.643 2.506 5.643-5.784 1.857 1.857-7.5 7.643z" />
                     </svg>
-                    <h4 class="process-title">START MAKING THE TEST</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Amet ornare malesuada vel, amet. Vel amet
-                        lobortis
-                        volutpat
-                        justo, morbi. Phasellus odio et turpis in fermentum rutrum mattis sit quisque. Sit natoque orci eu
-                        augue. Diam
-                        arcu ut
-                        adipiscing est et sed. Ornare tellus enim, non mus. Morbi et nullam sem dignissim velit placerat
-                        vestibulum. Et
-                        condimentum malesuada eget mauris nulla amet. Aliquam pharetra, viverra malesuada et, amet.</p>
+                    <h4 class="process-title">REVIEW YOUR RESULTS</h4>
+                    <p class="t-small">
+                        By default your results will be public, you can share them with anyone you want and anyone can access them as long they
+                        have the correct URL. When you are a registered user your results will become private and will be stored with the date
+                        on which you took the test so you can come back as many times as you want to keep track of them.
+                    </p>
                 </div>
             </div>
         </div>
     </section>
+    {% include "layout/footer.html" %}
 </body>
 {% endblock %}

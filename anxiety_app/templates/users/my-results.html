@@ -6,17 +6,14 @@
     <section class="myr">
         <div class="myr_header-sec">
             <h1 class="myr_main-title">Your tests results</h1>
-            <p><span class="t-bold">Tip: </span>If you click on the 'check' button you will see the original page of each one of your results.</p>
+            <p><span class="t-bold">Note: </span>Lower scores means less anxiety.</p>
         </div>
         <div class="myr_results">
             {% for title, value, id, date, result, total in userTests %}
             <article class="myr_block">
                 <div class="myr_block-info">
-                    <h2>{{ title }}</h2>
                     <p><span class="t-semibold">Result:</span> {{ result }} / {{ total }}</p>
-                </div>
-                <div class="myr_block-date">
-                    {{ date }}
+                    <h2>{{ title }}: {{ date }}</h2>
                 </div>
                 <div class="myr_block-check">
                     <a class="sec-btn" href="results/{{ id }}/{{ value }}" target="_blank">CHECK</a>
@@ -25,5 +22,6 @@
             {% endfor %}
         </div>
     </section>
+    {% include "layout/footer.html" %}
 </body>
 {% endblock %}

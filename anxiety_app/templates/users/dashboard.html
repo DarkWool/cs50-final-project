@@ -8,7 +8,7 @@
             <h1 class="dashboard_greet">Hi, {{ current_user.username }}!</h1>
         </div>
         <section class="dashboard_content">
-            <div class="dashboard_block yellow">
+            <div class="dashboard_block dark-bg">
                 <h2>Account information</h2>
                 <div class="dashboard_accfield">
                     <h3>Name:</h3>
@@ -23,15 +23,16 @@
                     <p>{{ date }}</p>
                 </div>
             </div>
-            <div class="dashboard_block dark">
+            <div class="dashboard_block yellow-bg">
                 <h2>Test results</h2>
-                <a href="#" class="primary-btn">Check</a>
+                <a href="{{ url_for('myresults') }}" class="primary-btn">Check</a>
             </div>
-            <div class="dashboard_block pink">
+            <div class="dashboard_block pink-bg">
                 <h2>Change password</h2>
                 <a href="#" class="primary-btn">Change</a>
             </div>
         </section>
     </main>
+    {% include "layout/footer.html" %}
 </body>
 {% endblock %}
