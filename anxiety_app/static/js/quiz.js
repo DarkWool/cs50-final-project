@@ -1,64 +1,50 @@
-/*
-1. Get the button with the ID of next.
-2. Append a listener, so each time the button is clicked create a new URL
-and fetch contents for the new question.
-*/
+const test = (function () {
+    let container = document.getElementById("questionContainer");
+    let data = new FormData();
+    let inputs;
+    
+    // Get the current parameter of the actual window - (if no parameter is provided '1' will be assigned)
+    const QUESTIONS = parseInt(document.getElementById("counter_number").dataset.total);
+    let currQuery = new URLSearchParams(window.location.search);
+    let currQuestion = currQuery.get("question") ?? 1;
 
-// Get the current parameter of the actual window - (if no parameter is provided '1' will be default)
-const QUESTIONS = parseInt(document.getElementById("counter_number").dataset.total);
+    function _appendFormData() {
+        let options = document.getElementsByName(`question${currQuestion}`);
+        let value;
 
-let currQuery = new URLSearchParams(window.location.search);
-let currQuestion = currQuery.get("question") ?? 1;
+        for (option of options) {
+            // Get the value of the answer selected by the user
+            if (option.checked) {
+                value = option.value;
+                break;
+            }
+        }
 
-
-let inputs;
-
-function enableNext(el) { 
-    next.disabled = false;
-    for (input of inputs) {
-        input.classList.remove("selected");
+        // Each time a question gets answered append the value of the answer on a FormData object
+        data.set(`question${currQuestion}`, value);
     }
-    el.target.classList.add("selected");
-};
 
-function createListeners() {
-    let next = document.getElementById("next");
-    next.disabled = true;
-    next.addEventListener("click", getQuestions);
+    async function _fetchQuestions() {
+        // Check if there is another question, if not you can post the data to the server.
+        currQuestion++;
+        if (currQuestion > QUESTIONS) {
+            return _postData();
+        }
 
-    inputs = document.querySelectorAll("input[type='radio']");
+        _appendFormData();
 
-    for (input of inputs) {
-        input.addEventListener("input", enableNext);
-    }
-}
+        // Fetch the next question data (template) from the server
+        let url = `${location.pathname}?question=${currQuestion}`;
+        let response = await fetch(`${url}`, {
+            method: "POST"
+        });
 
-let container = document.getElementById("questionContainer");
-
-let data = new FormData();
-
-async function getQuestions() {
-    let options = document.getElementsByName(`question${currQuestion}`);
-    let value;
-
-    for (option of options) {
-        if (option.checked) {
-            value = option.value;
-            break;
+        if (response.ok) {
+            return _render(await response.text());
         }
     }
-    
-    // Each time a question gets answered record the answer on a FormData object
-    data.set(`question${currQuestion}`, value);
-    
-    entries = data.entries();
-    for (entry of entries) {
-        console.log(entry);
-    }
-    
-    currQuestion++;
 
-    if (currQuestion > QUESTIONS) {
+    async function _postData() {
         let post = await fetch("/anxiety-test/results", {
             method: "POST",
             body: data
@@ -68,21 +54,31 @@ async function getQuestions() {
         return window.location.href = postRes.url;
     }
 
-    let url = `${location.pathname}?question=${currQuestion}`;
+    function _enableNextBtn(el) {
+        next.disabled = false;
 
-    let response = await fetch(`${url}`, {
-        method: "POST"
-    });
-
-
-    if (response.ok) {
-        let question = replaceContents(await response.text());
+        for (input of inputs) {
+            input.classList.remove("selected");
+        }
+        el.target.classList.add("selected")
     }
-}
 
-function replaceContents(page) {
-    container.innerHTML = page;
-    createListeners();
-}
+    function _attachEvents() {
+        let next = document.getElementById("next");
+        next.disabled = true;
+        next.addEventListener("click", _fetchQuestions);
 
-createListeners();
+        inputs = document.querySelectorAll("input[type='radio']");
+        for (input of inputs) {
+            input.addEventListener("input", _enableNextBtn);
+            input.disabled = false;
+        }
+    }
+
+    function _render(template) {
+        container.innerHTML = template;
+        _attachEvents();
+    }
+
+    _attachEvents();
+})();
