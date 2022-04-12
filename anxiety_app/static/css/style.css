@@ -363,7 +363,7 @@ hr {
 
 .counter_title {
     font-size: 20px;
-    font-weight: 600;
+    font-weight: bold;
     text-align: center;
     margin-bottom: 5px;
 }
@@ -384,7 +384,9 @@ hr {
 }
 
 #mainQuestion {
-    font-size: 32px;
+    font-family: Inter;
+    font-size: 28px;
+    font-weight: 400;
     line-height: 1.2;
     margin-bottom: 40px;
     text-align: left;
@@ -394,24 +396,38 @@ hr {
     margin-bottom: 15px;
 }
 
+input:disabled[name^="question"] ~ .question_mc {
+    background-color: hsl(256, 100%, 96%);
+}
+
+input:disabled[name^="question"] ~ .question_mc .question_mc-op {
+    background-color: hsl(256, 100%, 70%);
+}
+
 .question_mc {
     width: 100%;
     display: inline-block;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 500;
-    background-color: white;
+    background-color: hsl(257, 100%, 93%);
+    border-radius: 6px;
     transition: background-color 0.15s ease-in-out;
 }
 
-.question_mc:hover,
-.selected ~ .question_mc {
+.selected ~ :is(.question_mc, .question_mc:hover) {
     cursor: pointer;
     background-color: var(--yellow);
     color: black;
 }
 
+.question_mc:hover {
+    cursor: pointer;
+    background-color: hsl(42.2, 100%, 75%);
+}
+
 .question_mc:hover .question_mc-op,
 .selected + .question_mc .question_mc-op {
+    cursor: pointer;
     background-color: hsl(42, 100%, 42%);
 }
 
@@ -422,6 +438,8 @@ hr {
     display: inline-block;
     margin-right: 20px;
     font-weight: bold;
+    border-radius: 6px 0 0 6px;
+    transition: background-color 0.15s ease-in-out;
 }
 
 #next {
