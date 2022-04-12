@@ -77,13 +77,13 @@ class SignUpForm(FlaskForm):
     password = PasswordField("Password", [
         validators.InputRequired(),
         validators.Regexp("^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).{8,24}$", 0,
-            '''Password must contain at least one lowercase and one capital letter, a number and the length must be 
-            between 8 and 24 characters long''')
+            '''Password must contain at least one lowercase and one capital letter, a number and it must be 
+            between 8 and 24 characters long'''),
+        validators.EqualTo("confirmPassword", message="Passwords doesn't match")
     ])
 
     confirmPassword = PasswordField("Repeat Password", [
         validators.InputRequired(),
-        validators.EqualTo("password", message="Passwords doesn't match")
     ])
 
 class LoginForm(FlaskForm):
@@ -92,6 +92,26 @@ class LoginForm(FlaskForm):
     ])
     password = PasswordField("Password", [
         validators.InputRequired(),
+    ])
+
+class changePasswordForm(FlaskForm):
+    password = PasswordField("Current password", [
+        validators.InputRequired(),
+        validators.DataRequired()
+    ])
+
+    newPassword = PasswordField("New password", [
+        validators.InputRequired(),
+        validators.DataRequired(),
+        validators.Regexp("^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).{8,24}$", 0,
+            '''Password must contain at least one lowercase and one capital letter, a number and it must be 
+            between 8 and 24 characters long'''),
+        validators.EqualTo("confirmPassword", message="Passwords doesn't match")
+    ])
+
+    confirmPassword = PasswordField("Confirm password", [
+        validators.InputRequired(),
+        validators.DataRequired()
     ])
 
 
@@ -110,13 +130,12 @@ def login():
         cursor.execute("SELECT id, password FROM users WHERE username = ?", (username,))
         userData = cursor.fetchone()
 
-        if userData is None:
+        if userData is None or not check_password_hash(userData["password"], password):
             flash("Invalid username or password", "error")
             return redirect(url_for("login"))
-        elif check_password_hash(userData["password"], password):
-            user = load_user(userData["id"])
-            flask_login.login_user(user)
-            return redirect(url_for("dashboard"))
+        user = load_user(userData["id"])
+        flask_login.login_user(user)
+        return redirect(url_for("dashboard"))
 
     return render_template("auth/login.html", form=form)
 
@@ -184,6 +203,38 @@ def myresults():
     conn.close()
 
     return render_template("users/my-results.html", userTests=userTests)
+
+
+@app.route("/change-password", methods=["GET", "POST"])
+@flask_login.login_required
+def changePassword():
+    form = changePasswordForm()
+
+    if request.method == "POST" and form.validate_on_submit():
+        password = form.data["password"]
+        newPassword = form.data["newPassword"]
+
+        try:
+            userId = int(flask_login.current_user.get_id())
+        except:
+            return redirect(url_for("login"))
+
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute("SELECT password FROM users WHERE id = ?", (userId,))
+        userPassword = cursor.fetchone()["password"]
+
+        if not check_password_hash(userPassword, password):
+            flash("Incorrect password")
+            return redirect(url_for("changePassword"))
+
+        cursor.execute("UPDATE users SET password = ? WHERE id = ?", (generate_password_hash(newPassword), userId))
+        conn.commit()
+        conn.close()
+        flash("Your password has been changed", "success")
+        return redirect(url_for("changePassword"))
+
+    return render_template("users/change-password.html", form=form)
 
 
 @app.route("/logout")
