@@ -13,7 +13,7 @@
 
     {% for key, value in data['answers'].items() %}
     <div class="question_c">
-        <input type="radio" name="question{{ questionNumber }}" id="q{{ loop.index }}" value="{{ data['values'][key] }}">
+        <input type="radio" name="question{{ questionNumber }}" id="q{{ loop.index }}" value="{{ data['values'][key] }}" disabled="true" autocomplete="off">
         <label for="q{{ loop.index }}" class="question_mc">
             <span class="question_mc-op">{{ loop.index|getLetter }}</span>
             {{ value }}
