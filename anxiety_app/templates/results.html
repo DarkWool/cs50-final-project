@@ -1,0 +1,43 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Test Information{% endblock %}
+
+{% block body %}
+
+<body class="full-viewp">
+    {% include "layout/header.html" %}
+    <!-- <main class="full-cg"> -->
+        
+    <!-- </main> -->
+    <section class="results content-width">
+        <div class="res_score-col">
+            <h1 class="res_title">High Anxiety</h1>
+            <h2 class="res_subtitle">Score: <span class="purple">16 / 45</span></h2>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu diam maximus, viverra elit ut, varius ligula.
+                Curabitur luctus, ligula eu bibendum laoreet, sapien leo volutpat nibh, in tincidunt dolor lacus ac ex. Nunc venenatis
+                bibendum faucibus. Nullam auctor iaculis velit, sed ullamcorper dui rutrum eu. Nullam non dui id tellus venenatis
+                condimentum nec ac metus. Etiam blandit elementum justo in congue. Nullam viverra vehicula blandit. Nullam pulvinar
+                pulvinar velit, a tristique lorem. Donec imperdiet molestie massa, sit amet rutrum est convallis nec. Donec nunc lacus,
+                tempor et finibus eget, sagittis a enim. Maecenas pulvinar erat id augue rhoncus, et posuere nulla maximus. Sed varius
+                lorem ut porta faucibus. Curabitur odio dui, tristique vel scelerisque ac, consectetur ac tellus.
+            </p>
+        </div>
+        <div class="res_help-col">
+            <div class="res_help-block">
+                <h3 class="res_help-sub"><span class="purple">Get Help</span></h3>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur nesciunt beatae unde officia qui voluptas natus sunt amet, corrupti doloribus explicabo quas molestiae aperiam nisi soluta! Libero atque soluta mollitia.
+                </p>
+            </div>
+            <div class="res_help-block">
+                <h3 class="res_help-sub"><span class="purple">What is next?</span></h3>
+                <p>
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sit soluta quis nihil ex? Tempore ab, sit modi vitae voluptatum atque iure eius tempora voluptates asperiores quis. Maxime eum ullam commodi.
+                </p>
+            </div>
+        </div>
+    </section>
+    {% include "layout/footer.html" %}
+</body>
+{% endblock %}

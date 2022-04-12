@@ -687,6 +687,56 @@ input[type="radio"] {
 }
 
 
+/* Test result */
+.results {
+    display: flex;
+    flex-grow: 1;
+    gap: 10%;
+    margin: 100px 0;
+}
+
+.res_help-col {
+    width: 40%;
+}
+
+.res_score-col {
+    width: 60%;
+}
+
+.res_help-block + .res_help-block {
+    margin-top: 20px;
+}
+
+.res_help-block {
+    padding: 30px;
+    border-radius: 10px;
+    background-color: hsl(247, 100%, 96%);
+}
+
+.results :is(h1, h2) {
+    font-family: Inter;
+}
+
+.res_title {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.res_subtitle {
+    font-family: Inter;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.res_help-sub {
+    font-family: Inter;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
 /* Buttons */
 button, input[type="submit"] {
     cursor: pointer;
@@ -811,6 +861,10 @@ button, input[type="submit"] {
 
 .pink {
     color: var(--pink);
+}
+
+.purple {
+    color: var(--purple);
 }
 
 .t-bold {
@@ -1004,10 +1058,18 @@ button, input[type="submit"] {
         width: 100%;
     }
 
+
+    /* Test results */
+    .results {
+        gap: 3%;
+    }
+
+
     /* Sign up page */
     .auth-login, .auth-signup {
         margin: auto;
     }
+
 
     /* Dashboard */
     .dashboard_content {
@@ -1213,6 +1275,35 @@ button, input[type="submit"] {
     .sec-btn {
         margin-left: 10px;
         font-size: 14px;
+    }
+
+
+    /* Test results */
+    .results {
+        flex-direction: column;
+        gap: 30px;
+        margin: 10px 0 50px;
+    }
+
+    .res_title {
+        font-size: 24px;
+    }
+
+    .res_help-block {
+        padding: 25px;
+    }
+
+    .res_help-sub,
+    .res_subtitle {
+        font-size: 18px;
+    }
+
+    .res_score-col {
+        width: 100%;
+    }
+
+    .res_help-col {
+        width: 100%;
     }
 
 
