@@ -356,8 +356,10 @@ a:visited {
     position: relative;
     width: 100%;
     padding: 40px;
+    box-shadow: 0px 28px 38px rgba(0, 0, 0, 0.025);
     background-color: white;
     border-radius: 7px;
+
 }
 
 .steps_item:not(:last-child)::after {
@@ -754,6 +756,11 @@ input[type="radio"] {
 
 .m-fter_content a {
     color: var(--pink);
+    transition: .2s ease;
+}
+
+.m-fter_content a:hover {
+    color: pink;
 }
 
 .m-fter_info {
@@ -789,6 +796,7 @@ input[type="radio"] {
 .m-fter_link {
     margin-bottom: 5px;
 }
+
 
 
 /* Test result */
@@ -1124,7 +1132,7 @@ button, input[type="submit"] {
 
     /* My results page */
     .myr {
-        margin: 0;
+        margin: 0 0 80px;
         padding: 0 30px;
     }
 
@@ -1202,6 +1210,11 @@ button, input[type="submit"] {
     /* Menu */
     .m-header_logo > img {
         width: 120px;
+    }
+
+    /* Main section */
+    .quote_icon-c {
+        display: none;
     }
 
     /* Hamburger menu */
@@ -1402,6 +1415,7 @@ button, input[type="submit"] {
     /* My results page */
     .myr {
         padding: 0 10px;
+        margin: 30px 0 70px;
     }
 
     .myr_header-sec {
