@@ -25,13 +25,13 @@ const test = (function () {
     }
 
     async function _fetchQuestions() {
+        _appendFormData();
+
         // Check if there is another question, if not you can post the data to the server.
         currQuestion++;
         if (currQuestion > QUESTIONS) {
             return _postData();
         }
-
-        _appendFormData();
 
         // Fetch the next question data (template) from the server
         let url = `${location.pathname}?question=${currQuestion}`;
