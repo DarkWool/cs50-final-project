@@ -191,6 +191,7 @@ def dashboard():
 
     return render_template("users/dashboard.html", date=date)
 
+
 @app.route("/my-results")
 @flask_login.login_required
 def myresults():
@@ -216,7 +217,7 @@ def changePassword():
 
         try:
             userId = int(flask_login.current_user.get_id())
-        except:
+        except Exception as err:
             return redirect(url_for("login"))
 
         conn = connect_db()
@@ -276,8 +277,6 @@ def anxietyTest():
             else:
                 raise Exception("-Invalid number.")
         except (TypeError, Exception) as err:
-            print("####### -Error.")
-            print(err)
             return redirect(url_for("anxietyTest"))
     else:
         # Get first question, its answers and the num of total questions
@@ -305,98 +304,122 @@ def calculateResults(test):
 def results(id, hash):
     conn = connect_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT test_result, hash, user_id FROM results WHERE id = ?", (id,))
+    cursor.execute("SELECT test_id, test_result, hash, user_id FROM results WHERE id = ?", (id,))
     result = cursor.fetchone()
 
-    # Check if the test result is private (for logged users)
-    if result["user_id"] is not None:
+    if result == None or result["hash"] != hash:
+        return redirect(url_for("info"))
+    elif result["user_id"] != None:
         try:
             userId = int(flask_login.current_user.get_id())
+            cursor.execute('''SELECT qc.name, r.result FROM questions_categories qc INNER JOIN category_results r ON qc.id = r.category_id WHERE r.result_id = ?''', (id,))
+            categories = cursor.fetchall()
+            conn.close()
+
             if userId != result["user_id"]:
                 return redirect(url_for("info"))
-        except:
+
+            return (render_template("results.html", categories=categories, extraData=True))
+        except Exception as err:
+            print(err)
+            conn.close()
             return redirect(url_for("info"))
 
-    # Users can get curious and experiment with urls, thats why you have to compare if the hash 
-    #  of the result with the id they specified is the same as the hash on the URL
-    # If this had not been implemented then users would be able to look for other person results easily.
-    if result != None and result["hash"] == hash:
-        print("SUCCESS, TEST FOUND!")
-        if result["test_result"] <= 10:
-            return "Your score is low"
-        elif result["test_result"] <= 25:
-            return "Mild anxiety"
-        elif result["test_result"] <= 35:
-            return "High anxiety"
-        else:
-            return "Extreme anxiety, please seek help when possible"
-    else:
-        print("Test was not found or the hash did not match")
-        return redirect(url_for("info"))
+    # if flask_login.current_user.is_authenticated:
+
+    conn.close()
+    return (render_template("results.html", extraData=False))
 
 
 def getTestResult(slug, formData):
-    # Fetch general information about the test
+    # Fetch general info about the test
     conn = connect_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT id, total_questions, same_answers FROM tests WHERE slug = ?", (slug,))
-    testGeneralInfo = cursor.fetchone()
-    testTotalQuestions = testGeneralInfo["total_questions"]
+    cursor.execute("SELECT id, total_questions FROM tests WHERE slug = ?", (slug,))
+    testInfo = cursor.fetchone()
 
-    # Check if the answers are the same for all the questions
-    if testGeneralInfo["same_answers"] == True:
-        cursor.execute("SELECT value FROM answers WHERE test_id = ?", (testGeneralInfo["id"],))
-        testData = cursor.fetchall()
-        answers = []
+    # Get categories of the test
+    cursor.execute("SELECT category_id FROM questions WHERE test_id = ?", (testInfo["id"],))
+    categoriesList = cursor.fetchall();
 
-        for row in testData:
-            answers.append(row["value"])
+    # Get values from answers table
+    cursor.execute("SELECT value FROM answers WHERE test_id = ?", (testInfo["id"],))
+    testData = cursor.fetchall()
 
-        testTotalQuestions += 1
-        userResult = 0
+    answerValues = []
+    categoriesResults = {}
+    totalQuestions = len(categoriesList) + 1
+    userResult = 0
 
-        # Iterate by the total number of questions (not by the length of the form sent by the user)
-        # and get all the values of the form with the prefix of
-        # 'question' followed by the curr value of 'index' and sum them.
-        for index in range(1, testTotalQuestions):
-            try:
-                answerValue = int(formData.get(f"question{index}"))
-            except:
-                continue
+    for row in testData:
+        answerValues.append(row["value"])
 
-            if answerValue in answers:
-                userResult += answerValue
+    maxValue = max(answerValues)
 
-        # Generate a new UUID to associate with the id of the new test result
-        uuid = shortuuid.uuid()
-
-        if flask_login.current_user.is_authenticated:
-            cursor.execute('''INSERT INTO results (test_id, test_result, hash, user_id) VALUES(?, ?, ?, ?)''',
-            (testGeneralInfo["id"], userResult, uuid, flask_login.current_user.id))
+    for row in categoriesList:
+        if row["category_id"] in categoriesResults:
+            categoriesResults[row["category_id"]]["total"] += maxValue
         else:
-            # Insert the results into the db and retrieve the id of the row inserted
-            cursor.execute('''INSERT INTO results (test_id, test_result, hash) VALUES(?, ?, ?)''',
-            (testGeneralInfo["id"], userResult, uuid))
+            categoriesResults[row["category_id"]] = {
+                "id": row["category_id"],
+                "total": maxValue,
+                "userResult": 0
+            }
 
-        conn.commit()
+    for index in range(1, totalQuestions):
+        try:
+            userAnswer = int(formData.get(f"question{index}"))
+        except (TypeError, ValueError) as err:
+            continue
+
+        if userAnswer in answerValues:
+            categoryId = categoriesList[index - 1]["category_id"]
+            categoriesResults[categoryId]["userResult"] += userAnswer
+            userResult += userAnswer
+
+    # Generate a new UUID to associate with the id of the new test result
+    uuid = shortuuid.uuid()
+
+    if flask_login.current_user.is_authenticated:
+        cursor.execute('''INSERT INTO results (test_id, test_result, hash, user_id) VALUES(?, ?, ?, ?)''',
+        (testInfo["id"], userResult, uuid, flask_login.current_user.id))
+
         userResultId = cursor.lastrowid
 
+        finalResults = []
+        for category in categoriesResults:
+            result = getPercentage(categoriesResults[category]["userResult"], categoriesResults[category]["total"])
+            finalResults.append((userResultId, categoriesResults[category]["id"], result))
+
+        cursor.executemany("INSERT INTO category_results VALUES (?, ?, ?)", (finalResults))
+    else:
+        # Insert the results into the db and retrieve the id of the row inserted
+        cursor.execute('''INSERT INTO results (test_id, test_result, hash) VALUES(?, ?, ?)''',
+        (testInfo["id"], userResult, uuid))
+        userResultId = cursor.lastrowid
+
+    conn.commit()
     conn.close()
 
     return f"results/{userResultId}/{uuid}"
+
+
+def getPercentage(num, total):
+    return num / total * 100;
 
 
 def getTestData(slug, questionNumber):
     # First fetch general information about the test
     conn = connect_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT id, total_questions, same_answers FROM tests WHERE slug = ?", (slug,))
+    cursor.execute('''SELECT t.id, COUNT(q.test_id) AS total_questions FROM tests t
+    INNER JOIN questions q ON t.id = q.test_id WHERE t.slug = ?''', (slug,))
     testInfo = cursor.fetchone()
 
-    # Check if the answers will be the same for all the test. 
-    if testInfo["same_answers"] == True:
-        cursor.execute('''SELECT q.question, a.answer, a.value FROM questions q INNER JOIN answers a ON q.test_id=a.test_id WHERE q.question_number = ? AND q.test_id = ?''', (questionNumber, testInfo["id"]))
-        testData = cursor.fetchall()
+    # Get x question with answers of the current test  
+    cursor.execute('''SELECT q.question, a.answer, a.value FROM questions q INNER JOIN answers a 
+    ON q.test_id=a.test_id WHERE q.question_number = ? AND q.test_id = ?''', (questionNumber, testInfo["id"]))
+    testData = cursor.fetchall()
 
     conn.close()
 
