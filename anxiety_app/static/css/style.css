@@ -721,8 +721,8 @@ input[type="radio"] {
 
 .myr_block h2 {
     font-family: Inter;
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 18px;
+    font-weight: 400;
 }
 
 .myr_block p:first-child {

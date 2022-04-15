@@ -198,7 +198,7 @@ def myresults():
     userId = flask_login.current_user.id
     conn = connect_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT t.name, r.hash, r.id, r.date, r.test_result, t.max_score FROM tests t INNER JOIN results r ON t.id=r.test_id WHERE r.user_id = ?", (userId,))
+    cursor.execute("SELECT t.name, r.hash, r.id, r.date, r.test_result FROM tests t INNER JOIN results r ON t.id=r.test_id WHERE r.user_id = ?", (userId,))
     userTests =  cursor.fetchall()
     
     conn.close()

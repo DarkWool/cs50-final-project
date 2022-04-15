@@ -6,13 +6,13 @@
     <section class="myr">
         <div class="myr_header-sec">
             <h1 class="myr_main-title">Your tests results</h1>
-            <p><span class="t-bold">Note: </span>Lower scores means less anxiety.</p>
+            <p><span class="t-bold">Note: </span>Lower percentage means less anxiety.</p>
         </div>
         <div class="myr_results">
-            {% for title, value, id, date, result, total in userTests %}
+            {% for title, value, id, date, result in userTests %}
             <article class="myr_block">
                 <div class="myr_block-info">
-                    <p><span class="t-semibold">Result:</span> {{ result }} / {{ total }}</p>
+                    <p class="t-bold">Result: {{ result }}%</p>
                     <h2>{{ title }}: {{ date }}</h2>
                 </div>
                 <div class="myr_block-check">
