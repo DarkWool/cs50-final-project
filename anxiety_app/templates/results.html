@@ -1,14 +1,15 @@
 {% extends "layout/base.html" %}
-
+{% block scripts %}
+{% if extraData == True %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+    <script src="{{ url_for('static', filename='js/chart.js') }}" defer></script>
+{% endif %}
+{% endblock %}
 {% block title %}Test Information{% endblock %}
 
 {% block body %}
-
 <body class="full-viewp">
     {% include "layout/header.html" %}
-    <!-- <main class="full-cg"> -->
-        
-    <!-- </main> -->
     <section class="results content-width">
         <div class="res_score-col">
             <h1 class="res_title">High Anxiety</h1>
@@ -22,6 +23,9 @@
                 tempor et finibus eget, sagittis a enim. Maecenas pulvinar erat id augue rhoncus, et posuere nulla maximus. Sed varius
                 lorem ut porta faucibus. Curabitur odio dui, tristique vel scelerisque ac, consectetur ac tellus.
             </p>
+            <div>
+                <canvas id="barChart"></canvas>
+            </div>
         </div>
         <div class="res_help-col">
             <div class="res_help-block">
@@ -40,4 +44,15 @@
     </section>
     {% include "layout/footer.html" %}
 </body>
+{% if extraData == True %}
+<script>
+    const labels = [
+        {% for category in categories %}{{ category["name"]|tojson }},{% endfor %}
+    ];
+
+    const categoriesResults = [
+        {% for result in categories %}{{ result["result"]|tojson }},{% endfor %}
+    ];
+</script>
+{% endif %}
 {% endblock %}

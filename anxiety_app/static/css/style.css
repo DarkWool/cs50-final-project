@@ -756,7 +756,7 @@ input[type="radio"] {
 
 .m-fter_content a {
     color: var(--pink);
-    transition: .2s ease;
+    transition: 0.2s ease;
 }
 
 .m-fter_content a:hover {
@@ -846,6 +846,10 @@ input[type="radio"] {
     font-family: Inter;
     font-size: 20px;
     font-weight: bold;
+}
+
+#barChart {
+    margin-top: 30px;
 }
 
 
