@@ -674,8 +674,17 @@ input[type="radio"] {
     margin-bottom: 15px;
     text-align: center;
     padding: 20px 15px;
-    background-color: hsl(335, 74%, 95%);
     border-radius: 8px;
+}
+
+.auth_msg.error {
+    color: hsl(0, 100%, 31%);
+    background-color: hsl(335, 74%, 95%);
+}
+
+.auth_msg.success {
+    color: green;
+    background-color: hsl(158, 76%, 95%);
 }
 
 .auth_msg > ul {

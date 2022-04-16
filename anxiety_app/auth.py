@@ -99,6 +99,6 @@ def signup():
             return redirect("/dashboard")
 
         conn.close()
-        flash("Email / username already registered")
+        flash("Email / username already registered", "error")
         return redirect(url_for("signup"))
     return render_template("auth/signup.html", form=form)

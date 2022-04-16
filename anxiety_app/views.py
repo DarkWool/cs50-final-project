@@ -1,5 +1,5 @@
 import os
-from flask_login import login_required, current_user
+from flask_login import login_required, current_user, logout_user
 from anxiety_app import app
 from dotenv import load_dotenv
 from flask import render_template, request, redirect, url_for, make_response, flash
@@ -61,14 +61,18 @@ def changePassword():
         userPassword = cursor.fetchone()["password"]
 
         if not check_password_hash(userPassword, password):
-            flash("Incorrect password")
+            flash("Incorrect password", "error")
             conn.close()
             return redirect(url_for("changePassword"))
 
         cursor.execute("UPDATE users SET password = ? WHERE id = ?", (generate_password_hash(newPassword), userId))
         conn.commit()
         conn.close()
-        flash("Your password has been changed", "success")
+
+        logout_user()
+
+        flash("Success!", "success")
+        flash("Please, log in again with your new password", "success")
         return redirect(url_for("changePassword"))
 
     return render_template("users/change-password.html", form=form)
