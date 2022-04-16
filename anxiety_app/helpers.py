@@ -1,4 +1,5 @@
 import shortuuid
+from calendar import c
 from anxiety_app import app
 from anxiety_app.db import connect_db
 from flask_login import current_user
@@ -12,10 +13,10 @@ def getTestResult(slug, formData):
     # Fetch general info about the test
     conn = connect_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT id, total_questions FROM tests WHERE slug = ?", (slug,))
+    cursor.execute("SELECT id FROM tests WHERE slug = ?", (slug,))
     testInfo = cursor.fetchone()
 
-    # Get categories of the test
+    # Get categories of the test (and the total questions)
     cursor.execute("SELECT category_id FROM questions WHERE test_id = ?", (testInfo["id"],))
     categoriesList = cursor.fetchall();
 
@@ -57,22 +58,26 @@ def getTestResult(slug, formData):
     # Generate a new UUID to associate with the id of the new test result
     uuid = shortuuid.uuid()
 
+    # Get the percentage of the total result and get the appropriate keyword for it
+    userResult = round(getPercentage(userResult, len(categoriesList) * maxValue))
+    keyword = getKeyword(userResult)
+
     if current_user.is_authenticated:
-        cursor.execute('''INSERT INTO results (test_id, test_result, hash, user_id) VALUES(?, ?, ?, ?)''',
-        (testInfo["id"], userResult, uuid, current_user.id))
+        cursor.execute('''INSERT INTO results (test_id, test_result, hash, user_id, keyword) VALUES(?, ?, ?, ?, ?)''',
+        (testInfo["id"], userResult, uuid, current_user.id, keyword))
 
         userResultId = cursor.lastrowid
 
         finalResults = []
         for category in categoriesResults:
-            result = getPercentage(categoriesResults[category]["userResult"], categoriesResults[category]["total"])
+            result = round(getPercentage(categoriesResults[category]["userResult"], categoriesResults[category]["total"]))
             finalResults.append((userResultId, categoriesResults[category]["id"], result))
 
         cursor.executemany("INSERT INTO category_results VALUES (?, ?, ?)", (finalResults))
     else:
         # Insert the results into the db and retrieve the id of the row inserted
-        cursor.execute('''INSERT INTO results (test_id, test_result, hash) VALUES(?, ?, ?)''',
-        (testInfo["id"], userResult, uuid))
+        cursor.execute('''INSERT INTO results (test_id, test_result, hash, keyword) VALUES(?, ?, ?, ?)''',
+        (testInfo["id"], userResult, uuid, keyword))
         userResultId = cursor.lastrowid
 
     conn.commit()
@@ -111,3 +116,11 @@ def getNextQuestion(slug, questionNumber):
 
 def getPercentage(num, total):
     return num / total * 100;
+
+def getKeyword(result):
+    if result < 40:
+        return "Mild Anxiety"
+    elif result < 70:
+        return "Moderate Anxiety"
+    else:
+        return "Severe Anxiety"

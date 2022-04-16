@@ -1,18 +1,18 @@
 {% extends "layout/base.html" %}
 {% block title %}My Tests Results{% endblock %}
 {% block body %}
-<body>
+<body class="full-viewp">
     {% include "layout/header.html" %}
     <section class="myr">
         <div class="myr_header-sec">
             <h1 class="myr_main-title">Your tests results</h1>
-            <p><span class="t-bold">Note: </span>Lower percentage means less anxiety.</p>
+            <p><span class="t-bold">Note: </span>Check your complete results by clicking on the 'check' button.</p>
         </div>
         <div class="myr_results">
-            {% for title, value, id, date, result in userTests %}
+            {% for title, value, id, date, keyword in userTests %}
             <article class="myr_block">
                 <div class="myr_block-info">
-                    <p class="t-bold">Result: {{ result }}%</p>
+                    <p class="t-bold">Result: {{ keyword }}</p>
                     <h2>{{ title }}: {{ date }}</h2>
                 </div>
                 <div class="myr_block-check">

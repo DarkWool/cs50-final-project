@@ -19,7 +19,6 @@ CREATE TABLE IF NOT EXISTS tests (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     name TEXT NOT NULL,
     slug TEXT NOT NULL,
-    total_questions INTEGER NOT NULL,
     same_answers BOOLEAN
 );
 
@@ -29,6 +28,7 @@ CREATE TABLE IF NOT EXISTS results (
     test_result INTEGER NOT NULL,
     hash VARCHAR(32) NOT NULL,
     user_id INTEGER,
+    keyword TEXT NOT NULL,
     date DATETIME NOT NULL DEFAULT CURRENT_DATE,
     FOREIGN KEY(test_id) REFERENCES tests(id),
     FOREIGN KEY(user_id) REFERENCES users(id)

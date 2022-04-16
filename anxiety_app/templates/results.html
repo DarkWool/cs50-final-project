@@ -1,44 +1,105 @@
 {% extends "layout/base.html" %}
 {% block scripts %}
 {% if extraData == True %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
-    <script src="{{ url_for('static', filename='js/chart.js') }}" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+<script src="{{ url_for('static', filename='js/chart.js') }}" defer></script>
 {% endif %}
 {% endblock %}
-{% block title %}Test Information{% endblock %}
+{% block title %}Results{% endblock %}
 
 {% block body %}
 <body class="full-viewp">
     {% include "layout/header.html" %}
     <section class="results content-width">
         <div class="res_score-col">
-            <h1 class="res_title">High Anxiety</h1>
-            <h2 class="res_subtitle">Score: <span class="purple">16 / 45</span></h2>
+            <h1 class="res_title">{{ result["keyword"] }}</h1>
+            <h2 class="res_subtitle">Overall result: <span class="purple">{{ result["test_result"] }}%</span></h2>
+
+        {% if result["test_result"] < 40 %} 
             <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu diam maximus, viverra elit ut, varius ligula.
-                Curabitur luctus, ligula eu bibendum laoreet, sapien leo volutpat nibh, in tincidunt dolor lacus ac ex. Nunc venenatis
-                bibendum faucibus. Nullam auctor iaculis velit, sed ullamcorper dui rutrum eu. Nullam non dui id tellus venenatis
-                condimentum nec ac metus. Etiam blandit elementum justo in congue. Nullam viverra vehicula blandit. Nullam pulvinar
-                pulvinar velit, a tristique lorem. Donec imperdiet molestie massa, sit amet rutrum est convallis nec. Donec nunc lacus,
-                tempor et finibus eget, sagittis a enim. Maecenas pulvinar erat id augue rhoncus, et posuere nulla maximus. Sed varius
-                lorem ut porta faucibus. Curabitur odio dui, tristique vel scelerisque ac, consectetur ac tellus.
+                Anxiety is the human body's natural response to stress and believe it or not it has its benefits, but
+                it can represent an obstacle for you to live normally.
             </p>
+            <p>
+                We recommend you some self-help strategies that could be very useful to learn to control what
+                you feel but keep in mind that anxiety can evolve, if the symptoms persist for a long time it could be a disorder. That's why you need to pay attention to it, if in a near future you feel that anxiety is damaging your
+                personal life or relationships consult a professional of mental health, it could help you prevent a severe disorder.
+            </p>
+            <a href="https://www.mayoclinichealthsystem.org/hometown-health/speaking-of-health/11-tips-for-coping-with-an-anxiety-disorder" class="purple res_links" target="_blank">11 tips to deal with anxiety</a>
+        {% elif result["test_result"] < 70 %}
+            <p>
+                The moderate levels of anxiety that you present can interfere with your daily activities, the symptoms
+                are often not taken into account by people until they become a major problem.</p>
+            <p>
+                You need to start thinking about taking action to prevent your situation from worsening later and becoming more
+                difficult to control. One of the best options available is to see a doctor to follow the appropriate treatment and
+                improve your quality of life. On the other hand, if you think that your symptoms are not so problematic yet, you can try some strategies/methods that can help you feel better.
+            </p>
+            <a href="https://www.mayoclinichealthsystem.org/hometown-health/speaking-of-health/11-tips-for-coping-with-an-anxiety-disorder" class="purple res_links" target="_blank">11 tips to deal with anxiety</a>
+        {% else %}
+            <p>
+                People with severe anxiety can have serious problems with their lives as physical symptoms and intrusive thoughts are more intense, persistent and difficult to control.
+            </p>
+            <p>
+                In more extreme cases, individuals cannot leave their homes, which causes serious damage to their emotional health by isolating them from the people around them.
+            </p>
+            <p>
+                With severe anxiety you can begin to experience panic attacks, they are episodes of excessive fear accompanied by other physical symptoms (which vary depending on the person) one of these attacks can last from just a few minutes to an hour or even more.
+            </p>
+            <p>
+                You need to seek help as soon as possible, symptoms can get worse over time. Consult a professional to get treatment according to your anxiety levels.
+                <a href="https://www.verywellhealth.com/severe-anxiety-5200310" class="purple res_links"
+                    target="_blank">More info
+                    about severe anxiety</a>
+            </p>
+        {% endif %}
+
             <div>
                 <canvas id="barChart"></canvas>
             </div>
         </div>
         <div class="res_help-col">
             <div class="res_help-block">
-                <h3 class="res_help-sub"><span class="purple">Get Help</span></h3>
+                <h3 class="res_help-sub purple">Get Help</h3>
                 <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur nesciunt beatae unde officia qui voluptas natus sunt amet, corrupti doloribus explicabo quas molestiae aperiam nisi soluta! Libero atque soluta mollitia.
+                    If you find yourself fighting the battle against a mental disorder, you must seek help and treatment, sometimes the problems are out of our control and we shouldn't feel bad about it.
+                </p>
+                <p>
+                    You can find more information at these sites:
+                <ul>
+                    <li>
+                        <a href="https://checkpointorg.com/global/" class="purple res_links">CheckPoint</a>
+                    </li>
+                    <li>
+                        <a href="https://unitedgmh.org/mental-health-support" class="purple res_links">United for Global Mental Health</a>
+                    </li>
+                </ul>
                 </p>
             </div>
             <div class="res_help-block">
-                <h3 class="res_help-sub"><span class="purple">What is next?</span></h3>
+                <h3 class="res_help-sub purple">What is next?</h3>
                 <p>
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sit soluta quis nihil ex? Tempore ab, sit modi vitae voluptatum atque iure eius tempora voluptates asperiores quis. Maxime eum ullam commodi.
+                    While you are (hopefully) waiting to get medical attention you can try to do some things on your own to reduce anxiety, here is a list of the best ones!
                 </p>
+                <ol>
+                    <li class="res_list">
+                        <strong class="purple">Exercise.</strong>
+                        <br>
+                        Exercise is one of the best activities you can do to relax and it's not necessary to spend a lot of time of your day to notice differences, although we know that for some people it's not something pleasant we encourage you to give it a shot.
+                        <br>
+                        Start with an activity you think you would like and at your own pace.
+                    </li>
+                    <li class="res_list">
+                        <strong class="purple">Sleep.</strong>
+                        <br>
+                        When not resting appropriately your anxiety levels can get worse, try to sleep at least 7 hours every night.
+                    </li>
+                    <li class="res_list">
+                        <strong class="purple">Know your anxiety</strong>
+                        <br>
+                        We are all different. Start paying attention and identify what are the things that trigger your anxiety, if you know what triggers it, you can analyze it and develop strategies that help you feel better in those situations.
+                    </li>
+                </ol>
             </div>
         </div>
     </section>
@@ -47,11 +108,11 @@
 {% if extraData == True %}
 <script>
     const labels = [
-        {% for category in categories %}{{ category["name"]|tojson }},{% endfor %}
+        {% for category in categories %}{{category["name"]|tojson}},{% endfor %}
     ];
 
     const categoriesResults = [
-        {% for result in categories %}{{ result["result"]|tojson }},{% endfor %}
+        {% for result in categories %}{{result["result"]|tojson}},{% endfor %}
     ];
 </script>
 {% endif %}

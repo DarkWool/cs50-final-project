@@ -29,6 +29,7 @@ body, input, button {
 a {
     text-decoration: none;
     display: inline-block;
+    transition: 0.2s ease;
 }
 
 h1, h2, h3, h4, h5, h6, button {
@@ -688,7 +689,9 @@ input[type="radio"] {
 /* My results section (only registered users) */
 .myr {
     max-width: 1300px;
+    width: 100%;
     margin: 100px auto 100px;
+    flex-grow: 1;
 }
 
 .myr_header-sec {
@@ -756,7 +759,6 @@ input[type="radio"] {
 
 .m-fter_content a {
     color: var(--pink);
-    transition: 0.2s ease;
 }
 
 .m-fter_content a:hover {
@@ -803,7 +805,7 @@ input[type="radio"] {
 .results {
     display: flex;
     flex-grow: 1;
-    gap: 10%;
+    gap: 5%;
     margin: 100px 0;
 }
 
@@ -842,14 +844,46 @@ input[type="radio"] {
     margin-bottom: 20px;
 }
 
+.res_links {
+    margin-top: 10px;
+    font-weight: 600;
+}
+
 .res_help-sub {
     font-family: Inter;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
+}
+
+.res_list {
+    margin-top: 15px;
+}
+
+.res_list > strong {
+    display: inline-block;
+    margin-bottom: 5px;
 }
 
 #barChart {
     margin-top: 30px;
+}
+
+.w-error {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.w-error_title {
+    font-size: 86px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.w-error_msg {
+    font-size: 24px;
+    text-align: center;
 }
 
 
@@ -985,6 +1019,14 @@ button, input[type="submit"] {
 
 .purple {
     color: var(--purple);
+}
+
+a.purple:hover {
+    color: hsl(256, 100%, 65%);
+}
+
+.mt-10 {
+    margin-top: 10px;
 }
 
 .t-bold {

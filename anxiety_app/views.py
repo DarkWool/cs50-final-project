@@ -33,7 +33,7 @@ def myresults():
     userId = current_user.id
     conn = connect_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT t.name, r.hash, r.id, r.date, r.test_result FROM tests t INNER JOIN results r ON t.id=r.test_id WHERE r.user_id = ?", (userId,))
+    cursor.execute("SELECT t.name, r.hash, r.id, r.date, r.keyword FROM tests t INNER JOIN results r ON t.id=r.test_id WHERE r.user_id = ?", (userId,))
     userTests =  cursor.fetchall()
     
     conn.close()
@@ -128,7 +128,7 @@ def calculateResults(test):
 def results(id, hash):
     conn = connect_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT test_id, test_result, hash, user_id FROM results WHERE id = ?", (id,))
+    cursor.execute("SELECT test_id, test_result, hash, user_id, keyword FROM results WHERE id = ?", (id,))
     result = cursor.fetchone()
 
     if result == None or result["hash"] != hash:
@@ -143,11 +143,11 @@ def results(id, hash):
             if userId != result["user_id"]:
                 return redirect(url_for("info"))
 
-            return (render_template("results.html", categories=categories, extraData=True))
         except Exception as err:
             print(err)
             conn.close()
             return redirect(url_for("info"))
 
+        return (render_template("results.html", result=result, categories=categories, extraData=True))
     conn.close()
     return (render_template("results.html", extraData=False))
