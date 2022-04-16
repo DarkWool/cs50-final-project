@@ -96,7 +96,7 @@ def anxietyTest():
 
             # Check if parameter is between the range of possible questions
             if 0 < questionNumber <= data["totalQuestions"]:
-                return render_template("quiz.html", data=data, questionNumber=questionNumber)
+                return render_template("questions.html", data=data, questionNumber=questionNumber)
             else:
                 raise Exception("-Invalid number.")
         except (TypeError, Exception) as err:
@@ -151,3 +151,9 @@ def results(id, hash):
         return (render_template("results.html", result=result, categories=categories, extraData=True))
     conn.close()
     return (render_template("results.html", extraData=False))
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template("error.html", error=404, message="Not found"), 404

@@ -446,12 +446,12 @@ a:visited {
 
 /* Quiz styles */
 #questionContainer {
-    max-width: 800px;
+    width: 800px;
     margin: auto;
 }
 
 .counter_title {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     text-align: center;
     margin-bottom: 5px;
@@ -1404,6 +1404,7 @@ a.purple:hover {
     }
 
     #questionContainer {
+        width: 100%;
         padding: 0 10px;
     }
 

@@ -65,3 +65,47 @@ CREATE TABLE IF NOT EXISTS answers (
     FOREIGN KEY(question_id) REFERENCES questions(id),
     FOREIGN KEY(test_id) REFERENCES tests(id)
 );
+INSERT INTO tests (name, slug, same_answers) VALUES("Anxiety Test", "anxiety-test", 1);
+
+INSERT INTO questions_categories (name)
+VALUES
+    ("Generalized Anxiety"),
+    ("Social Anxiety"),
+    ("Agoraphobia"),
+    ("Physical Symptomps");
+
+INSERT INTO questions (question, test_id, question_number, category_id) 
+VALUES
+    ("I tend to think too much about the future.", 1, 1, 1),
+    ("In my everyday life, I have felt sudden fear, apparently for no reason.", 1, 2, 1),
+    ("Usually, I worry excessively about everyday things.", 1, 3, 1),
+    ("I sweat in an abnormal way.", 1, 4, 4),
+    ("During the day I feel tired and with not enough energy.", 1, 5, 4),
+    ("Even on small tasks, I have a hard time trying to concentrate.", 1, 6, 1),
+    ("I have a hard time making decisions on my own, I tend to overanalyze things.", 1, 7, 1),
+    ("I feel restless and have trouble relaxing.", 1, 8, 1),
+    ("I always get irritated easily.", 1, 9, 1),
+    ("I feel fear of leaving my house.", 1, 10, 3),
+    ("Often I feel like something bad can happen or that I'm about to lose control.", 1, 11, 3),
+    ("I have fear of being humiliated or ridiculed in public.", 1, 12, 2),
+    ("I have had a hard time making eye contact or talking to people I don't know.", 1, 13, 2),
+    ("Whenever I go out I feel like everyone is watching and judging me.", 1, 14, 2),
+    ("When in social situations, I think too much of what I'm going to say for fear to offend someone.", 1, 15, 2),
+    ("I feel fear of being in enclosed spaces.", 1, 16, 3),
+    ("I fear going crazy or losing control.", 1, 17, 1),
+    ("I don't attend social events or I leave early.", 1, 18, 2),
+    ("I tend to evade the crowds.", 1, 19, 3),
+    ("I fear traveling or doing things alone.", 1, 20, 3),
+    ("I have had a hard time swallowing, with a strange sensation.", 1, 21, 4),
+    ("I have had digestive problems (nausea, vomiting, abdominal pain, diarrhea, constipation, borborygmi, burning sensations).", 1, 22, 4),
+    ("I have experimented tachycardia and rapid heart rate.", 1, 23, 4),
+    ("Sometimes I have trouble breathing, like feeling out of breath.", 1, 24, 4),
+    ("It's hard for me to fall asleep or stay asleep.", 1, 25, 1);
+
+INSERT INTO answers (question_id, test_id, answer, value)
+VALUES
+    (1, 1, "Never", 0),
+    (1, 1, "Rarely", 1),
+    (1, 1, "Sometimes", 2),
+    (1, 1, "Most of the time", 3),
+    (1, 1, "Always", 4);

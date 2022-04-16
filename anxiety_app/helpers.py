@@ -95,7 +95,7 @@ def getNextQuestion(slug, questionNumber):
 
     # Get x question with answers of the current test  
     cursor.execute('''SELECT q.question, a.answer, a.value FROM questions q INNER JOIN answers a 
-    ON q.test_id=a.test_id WHERE q.question_number = ? AND q.test_id = ?''', (questionNumber, testInfo["id"]))
+    ON q.test_id=a.test_id WHERE q.question_number = ? AND q.test_id = ? ORDER BY a.value ASC''', (questionNumber, testInfo["id"]))
     testData = cursor.fetchall()
 
     conn.close()
