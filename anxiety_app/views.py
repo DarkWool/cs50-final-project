@@ -155,7 +155,7 @@ def results(id, hash):
 
         return (render_template("results.html", result=result, categories=categories, extraData=True))
     conn.close()
-    return (render_template("results.html", extraData=False))
+    return (render_template("results.html", result=result, extraData=False))
 
 
 # Handle errors
