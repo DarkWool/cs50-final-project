@@ -1,0 +1,14 @@
+{% extends "layout/base.html" %}
+
+{% block title %}{{error}}{% endblock %}
+
+{% block body %}
+<body class="full-viewp">
+{% include "layout/header.html" %}
+    <div class="w-error">
+        <h1 class="w-error_title">{{ error }}</h1>
+        <p class="w-error_msg">{{ message }}</p>
+    </div>
+    {% include "layout/footer.html" %}
+</body>
+{% endblock %}

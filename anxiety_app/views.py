@@ -2,7 +2,7 @@ import os
 from flask_login import login_required, current_user, logout_user
 from anxiety_app import app
 from dotenv import load_dotenv
-from flask import render_template, request, redirect, url_for, make_response, flash
+from flask import render_template, request, redirect, url_for, make_response, flash, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
 
@@ -52,7 +52,7 @@ def changePassword():
 
         try:
             userId = int(current_user.get_id())
-        except Exception as err:
+        except ValueError as err:
             return redirect(url_for("login"))
 
         conn = connect_db()
@@ -102,8 +102,8 @@ def anxietyTest():
             if 0 < questionNumber <= data["totalQuestions"]:
                 return render_template("questions.html", data=data, questionNumber=questionNumber)
             else:
-                raise Exception("-Invalid number.")
-        except (TypeError, Exception) as err:
+                raise ValueError("-Invalid number.")
+        except (TypeError, ValueError) as err:
             return redirect(url_for("anxietyTest"))
     else:
         # Get first question, its answers and the num of total questions
@@ -114,7 +114,7 @@ def anxietyTest():
         data = getNextQuestion(slug.replace("/", ""), 1)
 
         if data is None:
-            return redirect(url_for("info"))
+            abort(500)
 
         return render_template("quiz.html", data=data, questionNumber=1)
 
@@ -126,6 +126,8 @@ def calculateResults(test):
             url = getTestResult(test, request.form)
 
             return make_response({"url": url}, 200)
+        else:
+            abort(400)
 
 
 @app.route("/results/<int:id>/<string:hash>")
@@ -136,7 +138,7 @@ def results(id, hash):
     result = cursor.fetchone()
 
     if result == None or result["hash"] != hash:
-        return redirect(url_for("info"))
+        abort(404)
     elif result["user_id"] != None:
         try:
             userId = int(current_user.get_id())
@@ -145,19 +147,34 @@ def results(id, hash):
             conn.close()
 
             if userId != result["user_id"]:
-                return redirect(url_for("info"))
-
+                abort(401)
         except Exception as err:
             print(err)
             conn.close()
-            return redirect(url_for("info"))
+            abort(401)
 
         return (render_template("results.html", result=result, categories=categories, extraData=True))
     conn.close()
     return (render_template("results.html", extraData=False))
 
 
+# Handle errors
+@app.errorhandler(400)
+def badRequest(e):
+    return render_template("error.html", error=400, message="Bad request."), 400
+
+@app.errorhandler(401)
+def unauthorized(e):
+    return render_template("error.html", error=401, message="You are not authorized to access this page."), 401
+
 @app.errorhandler(404)
-def page_not_found(e):
-    # note that we set the 404 status explicitly
-    return render_template("error.html", error=404, message="Not found"), 404
+def pageNotFound(e):
+    return render_template("error.html", error=404, message="Sorry, the page you were looking for doesn't exist!"), 404
+
+@app.errorhandler(405)
+def wrongMethod(e):
+    return render_template("error.html", error=405, message="Method not allowed"), 405
+
+@app.errorhandler(500)
+def internalError(e):
+    return render_template("error.html", error=500, message="Internal Server Error"), 500

@@ -882,6 +882,7 @@ input[type="radio"] {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    margin: 80px 10px;
 }
 
 .w-error_title {
@@ -1225,6 +1226,7 @@ a.purple:hover {
     .tinfo {
         flex-direction: column-reverse;
         margin: 0 auto 20px;
+        gap: 60px;
     }
 
     .tinfo_content {
@@ -1234,6 +1236,7 @@ a.purple:hover {
 
     .tinfo .col-50 {
         width: 100%;
+        max-width: 72ch;
     }
 
 
@@ -1546,6 +1549,11 @@ a.purple:hover {
         width: 100%;
     }
 
+    .m-fter_info {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
     .f-content > div:first-child {
         margin-top: 20px;
     }
@@ -1557,5 +1565,15 @@ a.purple:hover {
 
     .m-fter_title {
         font-size: 16px;
+    }
+
+
+    /* Error messages */
+    .w-error_title {
+        font-size: 64px;
+    }
+
+    .w-error_msg {
+        font-size: 18px;
     }
 }
