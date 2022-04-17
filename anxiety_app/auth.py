@@ -1,6 +1,13 @@
 from anxiety_app import app
 from flask import redirect, url_for, render_template, request, flash
-from flask_login import login_user, login_required, logout_user, LoginManager, UserMixin, current_user
+from flask_login import (
+    login_user,
+    login_required,
+    logout_user,
+    LoginManager,
+    UserMixin,
+    current_user,
+)
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from anxiety_app.db import connect_db
@@ -31,13 +38,21 @@ def load_user(user_id):
     if userInfo is None:
         return None
     else:
-        return User(userInfo["id"], userInfo["username"], userInfo["first_name"], userInfo["email"], userInfo["password"]) 
+        return User(
+            userInfo["id"],
+            userInfo["username"],
+            userInfo["first_name"],
+            userInfo["email"],
+            userInfo["password"],
+        )
+
 
 @app.route("/logout")
 @login_required
 def logout():
     logout_user()
     return redirect(url_for("index"))
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -64,6 +79,7 @@ def login():
 
     return render_template("auth/login.html", form=form)
 
+
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     if current_user.is_authenticated:
@@ -80,13 +96,18 @@ def signup():
         # Search if username or email specified do not exist on the Database
         conn = connect_db()
         cursor = conn.cursor()
-        cursor.execute("SELECT username, email FROM users WHERE username = ? OR email = ?", (username, email))
+        cursor.execute(
+            "SELECT username, email FROM users WHERE username = ? OR email = ?",
+            (username, email),
+        )
         duplicateUser = cursor.fetchone()
 
         # It duplicateUser is None means that the username or email have not been taken yet
-        if duplicateUser is None:       
-            cursor.execute("INSERT INTO users (username, first_name, email, password) VALUES (?, ?, ?, ?)",
-                (username, firstName, email, password))
+        if duplicateUser is None:
+            cursor.execute(
+                "INSERT INTO users (username, first_name, email, password) VALUES (?, ?, ?, ?)",
+                (username, firstName, email, password),
+            )
             conn.commit()
             id = cursor.lastrowid
 

@@ -1,8 +1,17 @@
 import os
+
 from flask_login import login_required, current_user, logout_user
 from anxiety_app import app
 from dotenv import load_dotenv
-from flask import render_template, request, redirect, url_for, make_response, flash, abort
+from flask import (
+    render_template,
+    request,
+    redirect,
+    url_for,
+    make_response,
+    flash,
+    abort,
+)
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
 
@@ -14,6 +23,7 @@ from anxiety_app.auth import User
 load_dotenv()
 
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
+
 
 @app.route("/dashboard")
 @login_required
@@ -33,9 +43,12 @@ def myresults():
     userId = current_user.id
     conn = connect_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT t.name, r.hash, r.id, r.date, r.keyword FROM tests t INNER JOIN results r ON t.id=r.test_id WHERE r.user_id = ?", (userId,))
-    userTests =  cursor.fetchall()
-    
+    cursor.execute(
+        "SELECT t.name, r.hash, r.id, r.date, r.keyword FROM tests t INNER JOIN results r ON t.id=r.test_id WHERE r.user_id = ?",
+        (userId,),
+    )
+    userTests = cursor.fetchall()
+
     conn.close()
 
     return render_template("users/my-results.html", userTests=userTests)
@@ -65,7 +78,10 @@ def changePassword():
             conn.close()
             return redirect(url_for("changePassword"))
 
-        cursor.execute("UPDATE users SET password = ? WHERE id = ?", (generate_password_hash(newPassword), userId))
+        cursor.execute(
+            "UPDATE users SET password = ? WHERE id = ?",
+            (generate_password_hash(newPassword), userId),
+        )
         conn.commit()
         conn.close()
 
@@ -100,7 +116,9 @@ def anxietyTest():
 
             # Check if parameter is between the range of possible questions
             if 0 < questionNumber <= data["totalQuestions"]:
-                return render_template("questions.html", data=data, questionNumber=questionNumber)
+                return render_template(
+                    "questions.html", data=data, questionNumber=questionNumber
+                )
             else:
                 raise ValueError("-Invalid number.")
         except (TypeError, ValueError) as err:
@@ -134,7 +152,10 @@ def calculateResults(test):
 def results(id, hash):
     conn = connect_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT test_id, test_result, hash, user_id, keyword FROM results WHERE id = ?", (id,))
+    cursor.execute(
+        "SELECT test_id, test_result, hash, user_id, keyword FROM results WHERE id = ?",
+        (id,),
+    )
     result = cursor.fetchone()
 
     if result == None or result["hash"] != hash:
@@ -142,7 +163,10 @@ def results(id, hash):
     elif result["user_id"] != None:
         try:
             userId = int(current_user.get_id())
-            cursor.execute('''SELECT qc.name, r.result FROM questions_categories qc INNER JOIN category_results r ON qc.id = r.category_id WHERE r.result_id = ?''', (id,))
+            cursor.execute(
+                """SELECT qc.name, r.result FROM questions_categories qc INNER JOIN category_results r ON qc.id = r.category_id WHERE r.result_id = ?""",
+                (id,),
+            )
             categories = cursor.fetchall()
             conn.close()
 
@@ -153,9 +177,11 @@ def results(id, hash):
             conn.close()
             abort(401)
 
-        return (render_template("results.html", result=result, categories=categories, extraData=True))
+        return render_template(
+            "results.html", result=result, categories=categories, extraData=True
+        )
     conn.close()
-    return (render_template("results.html", result=result, extraData=False))
+    return render_template("results.html", result=result, extraData=False)
 
 
 # Handle errors
@@ -163,18 +189,39 @@ def results(id, hash):
 def badRequest(e):
     return render_template("error.html", error=400, message="Bad request."), 400
 
+
 @app.errorhandler(401)
 def unauthorized(e):
-    return render_template("error.html", error=401, message="You are not authorized to access this page."), 401
+    return (
+        render_template(
+            "error.html",
+            error=401,
+            message="You are not authorized to access this page.",
+        ),
+        401,
+    )
+
 
 @app.errorhandler(404)
 def pageNotFound(e):
-    return render_template("error.html", error=404, message="Sorry, the page you were looking for doesn't exist!"), 404
+    return (
+        render_template(
+            "error.html",
+            error=404,
+            message="Sorry, the page you were looking for doesn't exist!",
+        ),
+        404,
+    )
+
 
 @app.errorhandler(405)
 def wrongMethod(e):
     return render_template("error.html", error=405, message="Method not allowed"), 405
 
+
 @app.errorhandler(500)
 def internalError(e):
-    return render_template("error.html", error=500, message="Internal Server Error"), 500
+    return (
+        render_template("error.html", error=500, message="Internal Server Error"),
+        500,
+    )
