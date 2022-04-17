@@ -1,16 +1,16 @@
     {% if request.path == "/" %}
     <div class="grey-bg">
-        <img src="{{ url_for('static', filename='imgs/main-footer-top.png') }}" class="section-deco">
+        <img src="{{ url_for('static', filename='images/main-footer-top.png') }}" class="section-deco">
     </div>
     {% else %}
     <div>
-        <img src="{{ url_for('static', filename='imgs/main-footer-top.png') }}" class="section-deco">
+        <img src="{{ url_for('static', filename='images/main-footer-top.png') }}" class="section-deco">
     </div>
     {% endif %}
     <footer class="m-fter">
         <section class="m-fter_content">
             <div class="m-fter_info">
-                <img src="{{ url_for('static', filename='imgs/placeholder-logo.png') }}" width="180px" class="m-fter_logo">
+                <img src="{{ url_for('static', filename='images/logo-w.png') }}" width="180px" class="m-fter_logo">
                 <p>No more was created as a final project for the CS50 Introduction to Programming course, this page should
                     not be taken as
                     a real tool for a diagnosis of any anxiety disorder, since it was strictly made to demonstrate the
@@ -19,7 +19,7 @@
             </div>
             <div class="m-fter_about">
                 <a href="https://github.com/DarkWool/cs50-final-project" target="_blank">
-                    <img src="{{ url_for('static', filename='imgs/github-logo.png') }}" class="m-fter_logo">
+                    <img src="{{ url_for('static', filename='images/github-logo.png') }}" class="m-fter_logo">
                 </a>
                 <p>Project made by <a href="https://github.com/DarkWool/" target="_blank">DarkWool.</a></p>
             </div>

@@ -2,7 +2,7 @@
 {{ field.label }}
 {{ field(**kwargs)|safe }}
 {% if field.errors %}
-<div class="auth_msg">
+<div class="auth_msg error">
     <ul>
         {% for error in field.errors %}
         <li>{{ error }}</li>
