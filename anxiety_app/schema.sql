@@ -65,6 +65,7 @@ CREATE TABLE IF NOT EXISTS answers (
     FOREIGN KEY(question_id) REFERENCES questions(id),
     FOREIGN KEY(test_id) REFERENCES tests(id)
 );
+
 INSERT INTO tests (name, slug, same_answers) VALUES("Anxiety Test", "anxiety-test", 1);
 
 INSERT INTO questions_categories (name)
@@ -92,13 +93,13 @@ VALUES
     ("Whenever I go out I feel like everyone is watching and judging me.", 1, 14, 2),
     ("When in social situations, I think too much of what I'm going to say for fear to offend someone.", 1, 15, 2),
     ("I feel fear of being in enclosed spaces.", 1, 16, 3),
-    ("I fear going crazy or losing control.", 1, 17, 1),
+    ("I'm not able to remember things easily.", 1, 17, 1),
     ("I don't attend social events or I leave early.", 1, 18, 2),
     ("I tend to evade the crowds.", 1, 19, 3),
     ("I fear traveling or doing things alone.", 1, 20, 3),
-    ("I have had a hard time swallowing, with a strange sensation.", 1, 21, 4),
+    ("I have had a hard time swallowing, like feeling a strange sensation.", 1, 21, 4),
     ("I have had digestive problems (nausea, vomiting, abdominal pain, diarrhea, constipation, borborygmi, burning sensations).", 1, 22, 4),
-    ("I have experimented tachycardia and rapid heart rate.", 1, 23, 4),
+    ("I have experimented tachycardia (rapid heart rate).", 1, 23, 4),
     ("Sometimes I have trouble breathing, like feeling out of breath.", 1, 24, 4),
     ("It's hard for me to fall asleep or stay asleep.", 1, 25, 1);
 
