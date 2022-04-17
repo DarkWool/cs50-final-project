@@ -163,20 +163,19 @@ def results(id, hash):
     elif result["user_id"] != None:
         try:
             userId = int(current_user.get_id())
-            cursor.execute(
-                """SELECT qc.name, r.result FROM questions_categories qc INNER JOIN category_results r ON qc.id = r.category_id WHERE r.result_id = ?""",
-                (id,),
-            )
-            categories = cursor.fetchall()
-            conn.close()
-
-            if userId != result["user_id"]:
-                abort(401)
-        except Exception as err:
-            print(err)
+        except (TypeError, ValueError) as err:
             conn.close()
             abort(401)
 
+        if userId != result["user_id"]:
+            abort(403)
+
+        cursor.execute(
+            """SELECT qc.name, r.result FROM questions_categories qc INNER JOIN category_results r ON qc.id = r.category_id WHERE r.result_id = ?""",
+            (id,),
+        )
+        categories = cursor.fetchall()
+        conn.close()
         return render_template(
             "results.html", result=result, categories=categories, extraData=True
         )
@@ -200,6 +199,17 @@ def unauthorized(e):
         ),
         401,
     )
+
+
+@app.errorhandler(403)
+def forbidden(e):
+    return (
+        render_template(
+            "error.html",
+            error=403,
+            message="You don't have permission to access this resource.",
+        )
+    ), 403
 
 
 @app.errorhandler(404)
