@@ -9,7 +9,7 @@
 
 {% block body %}
 <body class="full-viewp">
-    {% include "layout/header.html" %}
+{% include "layout/header.html" %}
     <section class="results content-width">
         <div class="res_score-col">
             <h1 class="res_title">{{ result["keyword"] }}</h1>
@@ -104,16 +104,16 @@
         </div>
     </section>
     {% include "layout/footer.html" %}
-</body>
-{% if extraData == True %}
-<script>
-    const labels = [
-        {% for category in categories %}{{category["name"]|tojson}},{% endfor %}
-    ];
+    {% if extraData == True %}
+    <script>
+        const labels = [
+            {% for category in categories %}{{category["name"]|tojson}},{% endfor %}
+        ];
 
-    const categoriesResults = [
-        {% for result in categories %}{{result["result"]|tojson}},{% endfor %}
-    ];
-</script>
-{% endif %}
+        const categoriesResults = [
+            {% for result in categories %}{{result["result"]|tojson}},{% endfor %}
+        ];
+    </script>
+    {% endif %}
+</body>
 {% endblock %}

@@ -2,7 +2,7 @@
 {% block title %}My account{% endblock %}
 {% block body %}
 <body class="full-viewp">
-    {% include "layout/header.html" %}
+{% include "layout/header.html" %}
     <main class="dashboard">
         <div>
             <h1 class="dashboard_greet">Hi, {{ current_user.username }}!</h1>
@@ -29,7 +29,7 @@
             </div>
             <div class="dashboard_block pink-bg">
                 <h2>Change password</h2>
-                <a href="#" class="primary-btn">Change</a>
+                <a href="{{ url_for('changePassword') }}" class="primary-btn">Change</a>
             </div>
         </section>
     </main>

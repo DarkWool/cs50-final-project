@@ -3,16 +3,27 @@
 {% block title %}Sign Up{% endblock %}
 {% block body %}
 <body class="full-viewp">
-    {% include "layout/header.html" %}
+{% include "layout/header.html" %}
     <section class="auth-signup">
         <div>
             <h1 class="auth_title">Join us!</h1>
         </div>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <div class="auth_msg">
+        {% with success = get_flashed_messages(category_filter=["success"]) %}
+        {% if success %}
+        <div class="auth_msg success">
             <ul>
-                {% for message in messages %}
+                {% for message in success %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        {% endwith %}
+        {% with error = get_flashed_messages(category_filter=["error"]) %}
+        {% if error %}
+        <div class="auth_msg error">
+            <ul>
+                {% for message in error %}
                 <li>{{ message }}</li>
                 {% endfor %}
             </ul>

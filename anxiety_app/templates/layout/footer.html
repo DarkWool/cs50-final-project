@@ -1,60 +1,60 @@
-{% if request.path == "/" %}
-<div class="grey-bg">
-    <img src="{{ url_for('static', filename='imgs/main-footer-top.png') }}" class="section-deco">
-</div>
-{% else %}
-<div>
-    <img src="{{ url_for('static', filename='imgs/main-footer-top.png') }}" class="section-deco">
-</div>
-{% endif %}
-<footer class="m-fter">
-    <section class="m-fter_content">
-        <div class="m-fter_info">
-            <img src="{{ url_for('static', filename='imgs/placeholder-logo.png') }}" width="180px" class="m-fter_logo">
-            <p>No more was created as a final project for the CS50 Introduction to Programming course, this page should
-                not be taken as
-                a real tool for a diagnosis of any anxiety disorder, since it was strictly made to demonstrate the
-                knowledge acquired
-                during the course.</p>
-        </div>
-        <div class="m-fter_about">
-            <a href="https://github.com/DarkWool/cs50-final-project" target="_blank">
-                <img src="{{ url_for('static', filename='imgs/github-logo.png') }}" class="m-fter_logo">
-            </a>
-            <p>Project made by <a href="https://github.com/DarkWool/" target="_blank">DarkWool.</a></p>
-        </div>
-        <div class="m-fter_contact">
-            <div>
-                <h4 class="m-fter_title">Need to talk?</h4>
-                <p class="m-fter_title">01-800-123-456</p>
-                <p>Sometimes it’s not easy to take the first step but we want to encourage you to do it, share what you
-                    feel to someone is
-                    a good way to start!</p>
+    {% if request.path == "/" %}
+    <div class="grey-bg">
+        <img src="{{ url_for('static', filename='imgs/main-footer-top.png') }}" class="section-deco">
+    </div>
+    {% else %}
+    <div>
+        <img src="{{ url_for('static', filename='imgs/main-footer-top.png') }}" class="section-deco">
+    </div>
+    {% endif %}
+    <footer class="m-fter">
+        <section class="m-fter_content">
+            <div class="m-fter_info">
+                <img src="{{ url_for('static', filename='imgs/placeholder-logo.png') }}" width="180px" class="m-fter_logo">
+                <p>No more was created as a final project for the CS50 Introduction to Programming course, this page should
+                    not be taken as
+                    a real tool for a diagnosis of any anxiety disorder, since it was strictly made to demonstrate the
+                    knowledge acquired
+                    during the course.</p>
             </div>
-            <div>
-                <h4 class="m-fter_title">Further help</h4>
-                <ul>
-                    <li>
-                        <a href="https://www.nami.org/help" target="_blank" class="m-fter_link">
-                            National Alliance on Mental Illness (NAMI) Helpline:
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://suicidepreventionlifeline.org/" target="_blank" class="m-fter_link">
-                            National Suicide Prevention
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://adaa.org/" target="_blank" class="m-fter_link">
-                            Anxiety and Depression Association of America, ADAA
-                        </a>
-                    </li>
-                </ul>
+            <div class="m-fter_about">
+                <a href="https://github.com/DarkWool/cs50-final-project" target="_blank">
+                    <img src="{{ url_for('static', filename='imgs/github-logo.png') }}" class="m-fter_logo">
+                </a>
+                <p>Project made by <a href="https://github.com/DarkWool/" target="_blank">DarkWool.</a></p>
             </div>
-            <div>
-                <h4 class="m-fter_title">Contact Us!</h4>
-                <a href="mailto:nomore@example.com">nomore@example.com</a>
+            <div class="m-fter_contact">
+                <div>
+                    <h4 class="m-fter_title">Need to talk?</h4>
+                    <p class="m-fter_title">01-800-123-456</p>
+                    <p>Sometimes it’s not easy to take the first step but we want to encourage you to do it, share what you
+                        feel to someone is
+                        a good way to start!</p>
+                </div>
+                <div>
+                    <h4 class="m-fter_title">Further help</h4>
+                    <ul>
+                        <li>
+                            <a href="https://www.nami.org/help" target="_blank" class="m-fter_link">
+                                National Alliance on Mental Illness (NAMI) Helpline:
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://suicidepreventionlifeline.org/" target="_blank" class="m-fter_link">
+                                National Suicide Prevention
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://adaa.org/" target="_blank" class="m-fter_link">
+                                Anxiety and Depression Association of America, ADAA
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="m-fter_title">Contact Us!</h4>
+                    <a href="mailto:nomore@example.com">nomore@example.com</a>
+                </div>
             </div>
-        </div>
-    </section>
-</footer>
+        </section>
+    </footer>

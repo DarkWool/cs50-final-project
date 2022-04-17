@@ -8,7 +8,6 @@
             <ul class="menu_nav">
                 <li><a class="menu_anchor" href="{{ url_for('index') }}">Home</a></li>
                 <li><a class="menu_anchor" href="{{ url_for('info') }}">Anxiety test</a></li>
-                <li><a class="menu_anchor" href="{{ url_for('info') }}">About</a></li>
             </ul>
         </nav>
         <div class="m-header_auth">
@@ -37,7 +36,6 @@
             <nav class="sidebar_nav">
                 <a class="sidebar_anchor" href="{{ url_for('index') }}">Home</a>
                 <a class="sidebar_anchor" href="{{ url_for('info') }}">Anxiety Test</a>
-                <a class="sidebar_anchor" href="{{ url_for('info') }}">About</a>
                 {% if current_user.is_authenticated %}
                 <a class="sidebar_anchor" href="{{ url_for('dashboard') }}">My account</a>
                 <a class="sidebar_anchor" href="{{ url_for('logout') }}">Log out</a>
