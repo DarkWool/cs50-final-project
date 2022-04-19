@@ -1,6 +1,7 @@
 const test = (function () {
     let container = document.getElementById("questionContainer");
     let data = new FormData();
+    let next = document.getElementById("next");
     let inputs;
     
     // Get the current parameter of the actual window - (if no parameter is provided '1' will be assigned)
@@ -25,6 +26,7 @@ const test = (function () {
     }
 
     async function _fetchQuestions() {
+        _detachEvents();
         _appendFormData();
 
         // Check if there is another question, if not you can post the data to the server.
@@ -64,7 +66,7 @@ const test = (function () {
     }
 
     function _attachEvents() {
-        let next = document.getElementById("next");
+        next = document.getElementById("next");
         next.disabled = true;
         next.addEventListener("click", _fetchQuestions);
 
@@ -72,6 +74,14 @@ const test = (function () {
         for (input of inputs) {
             input.addEventListener("input", _enableNextBtn);
             input.disabled = false;
+        }
+    }
+
+    function _detachEvents() {
+        next.removeEventListener("click", _fetchQuestions);
+
+        for (input of inputs) {
+            input.removeEventListener("input", _enableNextBtn);
         }
     }
 
