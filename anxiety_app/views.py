@@ -1,4 +1,5 @@
 import os
+import psycopg2.extras as ext
 
 from flask_login import login_required, current_user, logout_user
 from anxiety_app import app
@@ -15,7 +16,7 @@ from flask import (
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
 
-from anxiety_app.db import connect_db
+from anxiety_app.db import connect_db, single_query
 from anxiety_app.forms import changePasswordForm
 from anxiety_app.helpers import getNextQuestion, getTestResult
 from anxiety_app.auth import User
@@ -28,28 +29,23 @@ app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
 @app.route("/dashboard")
 @login_required
 def dashboard():
-    conn = connect_db()
-    cursor = conn.cursor()
-    cursor.execute("SELECT date_created FROM users WHERE id = ?", (current_user.id,))
-    date = cursor.fetchone()["date_created"]
-    conn.close()
+    date = single_query(
+        "SELECT date_created FROM users WHERE id = %s", (current_user.id,)
+    )
 
-    return render_template("users/dashboard.html", date=date)
+    return render_template("users/dashboard.html", date=date["date_created"])
 
 
 @app.route("/my-results")
 @login_required
 def myresults():
     userId = current_user.id
-    conn = connect_db()
-    cursor = conn.cursor()
-    cursor.execute(
-        "SELECT t.name, r.hash, r.id, r.date, r.keyword FROM tests t INNER JOIN results r ON t.id=r.test_id WHERE r.user_id = ?",
-        (userId,),
-    )
-    userTests = cursor.fetchall()
 
-    conn.close()
+    userTests = single_query(
+        "SELECT t.name, r.hash, r.id, r.date, r.keyword FROM tests t INNER JOIN results r ON t.id=r.test_id WHERE r.user_id = %s",
+        (userId,),
+        True,
+    )
 
     return render_template("users/my-results.html", userTests=userTests)
 
@@ -69,20 +65,23 @@ def changePassword():
             return redirect(url_for("login"))
 
         conn = connect_db()
-        cursor = conn.cursor()
-        cursor.execute("SELECT password FROM users WHERE id = ?", (userId,))
+        cursor = conn.cursor(cursor_factory=ext.DictCursor)
+        cursor.execute("SELECT password FROM users WHERE id = %s", (userId,))
         userPassword = cursor.fetchone()["password"]
 
         if not check_password_hash(userPassword, password):
             flash("Incorrect password", "error")
+            cursor.close()
             conn.close()
             return redirect(url_for("changePassword"))
 
         cursor.execute(
-            "UPDATE users SET password = ? WHERE id = ?",
+            "UPDATE users SET password = %s WHERE id = %s",
             (generate_password_hash(newPassword), userId),
         )
         conn.commit()
+
+        cursor.close()
         conn.close()
 
         logout_user()
@@ -151,19 +150,22 @@ def calculateResults(test):
 @app.route("/results/<int:id>/<string:hash>")
 def results(id, hash):
     conn = connect_db()
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=ext.DictCursor)
     cursor.execute(
-        "SELECT test_id, test_result, hash, user_id, keyword FROM results WHERE id = ?",
+        "SELECT test_id, test_result, hash, user_id, keyword FROM results WHERE id = %s",
         (id,),
     )
     result = cursor.fetchone()
 
     if result == None or result["hash"] != hash:
+        cursor.close()
+        conn.close()
         abort(404)
     elif result["user_id"] != None:
         try:
             userId = int(current_user.get_id())
         except (TypeError, ValueError) as err:
+            cursor.close()
             conn.close()
             abort(401)
 
@@ -171,15 +173,15 @@ def results(id, hash):
             abort(403)
 
         cursor.execute(
-            """SELECT qc.name, r.result FROM questions_categories qc INNER JOIN category_results r ON qc.id = r.category_id WHERE r.result_id = ?""",
+            """SELECT qc.name, r.result FROM questions_categories qc INNER JOIN category_results r ON qc.id = r.category_id WHERE r.result_id = %s""",
             (id,),
         )
         categories = cursor.fetchall()
+        cursor.close()
         conn.close()
         return render_template(
             "results.html", result=result, categories=categories, extraData=True
         )
-    conn.close()
     return render_template("results.html", result=result, extraData=False)
 
 

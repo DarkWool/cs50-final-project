@@ -1,4 +1,5 @@
 import shortuuid
+import psycopg2.extras as ext
 
 from calendar import c
 from anxiety_app import app
@@ -14,29 +15,27 @@ def getLetter(number):
 def getTestResult(slug, formData):
     # Fetch general info about the test
     conn = connect_db()
-    cursor = conn.cursor()
-    cursor.execute("SELECT id FROM tests WHERE slug = ?", (slug,))
+    cursor = conn.cursor(cursor_factory=ext.DictCursor)
+    cursor.execute("SELECT id FROM tests WHERE slug = %s", (slug,))
     testInfo = cursor.fetchone()
 
     # Get categories of the test (and the total questions)
     cursor.execute(
-        "SELECT category_id FROM questions WHERE test_id = ?", (testInfo["id"],)
+        "SELECT category_id FROM questions WHERE test_id = %s", (testInfo["id"],)
     )
     categoriesList = cursor.fetchall()
 
     # Get values from answers table
-    cursor.execute("SELECT value FROM answers WHERE test_id = ?", (testInfo["id"],))
-    testData = cursor.fetchall()
+    cursor.execute(
+        "SELECT array_agg(value) FROM answers WHERE test_id = %s", (testInfo["id"],)
+    )
+    answersValues = cursor.fetchone()[0]
 
-    answerValues = []
     categoriesResults = {}
     totalQuestions = len(categoriesList) + 1
     userResult = 0
 
-    for row in testData:
-        answerValues.append(row["value"])
-
-    maxValue = max(answerValues)
+    maxValue = max(answersValues)
 
     for row in categoriesList:
         if row["category_id"] in categoriesResults:
@@ -54,7 +53,7 @@ def getTestResult(slug, formData):
         except (TypeError, ValueError) as err:
             continue
 
-        if userAnswer in answerValues:
+        if userAnswer in answersValues:
             categoryId = categoriesList[index - 1]["category_id"]
             categoriesResults[categoryId]["userResult"] += userAnswer
             userResult += userAnswer
@@ -68,11 +67,10 @@ def getTestResult(slug, formData):
 
     if current_user.is_authenticated:
         cursor.execute(
-            """INSERT INTO results (test_id, test_result, hash, user_id, keyword) VALUES(?, ?, ?, ?, ?)""",
+            """INSERT INTO results (test_id, test_result, hash, user_id, keyword) VALUES(%s, %s, %s, %s, %s) RETURNING ID""",
             (testInfo["id"], userResult, uuid, current_user.id, keyword),
         )
-
-        userResultId = cursor.lastrowid
+        userResultId = cursor.fetchone()["id"]
 
         finalResults = []
         for category in categoriesResults:
@@ -86,18 +84,20 @@ def getTestResult(slug, formData):
                 (userResultId, categoriesResults[category]["id"], result)
             )
 
-        cursor.executemany(
-            "INSERT INTO category_results VALUES (?, ?, ?)", (finalResults)
+        ext.execute_batch(
+            cursor, "INSERT INTO category_results VALUES (%s, %s, %s)", finalResults
         )
     else:
         # Insert the results into the db and retrieve the id of the row inserted
         cursor.execute(
-            """INSERT INTO results (test_id, test_result, hash, keyword) VALUES(?, ?, ?, ?)""",
+            """INSERT INTO results (test_id, test_result, hash, keyword) VALUES(%s, %s, %s, %s) RETURNING ID""",
             (testInfo["id"], userResult, uuid, keyword),
         )
-        userResultId = cursor.lastrowid
+        userResultId = cursor.fetchone()["id"]
 
     conn.commit()
+
+    cursor.close()
     conn.close()
 
     return f"results/{userResultId}/{uuid}"
@@ -106,10 +106,10 @@ def getTestResult(slug, formData):
 def getNextQuestion(slug, questionNumber):
     # First fetch general information about the test
     conn = connect_db()
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=ext.DictCursor)
     cursor.execute(
         """SELECT t.id, COUNT(q.test_id) AS total_questions FROM tests t
-    INNER JOIN questions q ON t.id = q.test_id WHERE t.slug = ?""",
+    INNER JOIN questions q ON t.id = q.test_id WHERE t.slug = %s GROUP BY t.id""",
         (slug,),
     )
     testInfo = cursor.fetchone()
@@ -117,11 +117,12 @@ def getNextQuestion(slug, questionNumber):
     # Get x question with answers of the current test
     cursor.execute(
         """SELECT q.question, a.answer, a.value FROM questions q INNER JOIN answers a 
-    ON q.test_id=a.test_id WHERE q.question_number = ? AND q.test_id = ? ORDER BY a.value ASC""",
+    ON q.test_id=a.test_id WHERE q.question_number = %s AND q.test_id = %s ORDER BY a.value ASC""",
         (questionNumber, testInfo["id"]),
     )
     testData = cursor.fetchall()
 
+    cursor.close()
     conn.close()
 
     formattedData = {

@@ -1,4 +1,5 @@
 from anxiety_app import app
+import psycopg2.extras as ext
 from flask import redirect, url_for, render_template, request, flash
 from flask_login import (
     login_user,
@@ -10,7 +11,7 @@ from flask_login import (
 )
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from anxiety_app.db import connect_db
+from anxiety_app.db import connect_db, single_query
 from anxiety_app.forms import LoginForm, SignUpForm
 
 # Login stuff
@@ -30,11 +31,8 @@ class User(UserMixin):
 
 @login_manager.user_loader
 def load_user(user_id):
-    conn = connect_db()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
-    userInfo = cursor.fetchone()
-    conn.close()
+    userInfo = single_query("SELECT * FROM users WHERE id = %s", (user_id,))
+
     if userInfo is None:
         return None
     else:
@@ -64,11 +62,9 @@ def login():
         username = form.data["username"]
         password = form.data["password"]
 
-        conn = connect_db()
-        cursor = conn.cursor()
-        cursor.execute("SELECT id, password FROM users WHERE username = ?", (username,))
-        userData = cursor.fetchone()
-        conn.close()
+        userData = single_query(
+            "SELECT id, password FROM users WHERE username = %s", (username,)
+        )
 
         if userData is None or not check_password_hash(userData["password"], password):
             flash("Invalid username or password", "error")
@@ -95,9 +91,9 @@ def signup():
 
         # Search if username or email specified do not exist on the Database
         conn = connect_db()
-        cursor = conn.cursor()
+        cursor = conn.cursor(cursor_factory=ext.DictCursor)
         cursor.execute(
-            "SELECT username, email FROM users WHERE username = ? OR email = ?",
+            "SELECT username, email FROM users WHERE username = %s OR email = %s",
             (username, email),
         )
         duplicateUser = cursor.fetchone()
@@ -105,21 +101,25 @@ def signup():
         # It duplicateUser is None means that the username or email have not been taken yet
         if duplicateUser is None:
             cursor.execute(
-                "INSERT INTO users (username, first_name, email, password) VALUES (?, ?, ?, ?)",
+                "INSERT INTO users (username, first_name, email, password) VALUES (%s, %s, %s, %s) RETURNING ID",
                 (username, firstName, email, password),
             )
             conn.commit()
-            id = cursor.lastrowid
+            id = cursor.fetchone()["id"]
 
             # Create a new user object
             user = User(id, username, firstName, email, password)
 
             # Pass the User object to the login_user function
             login_user(user)
+
+            cursor.close()
             conn.close()
             return redirect("/dashboard")
 
+        cursor.close()
         conn.close()
+
         flash("Email / username already registered", "error")
         return redirect(url_for("signup"))
     return render_template("auth/signup.html", form=form)
