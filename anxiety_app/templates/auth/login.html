@@ -3,33 +3,12 @@
 {% block title %}Login{% endblock %}
 {% block body %}
 <body class="full-viewp">
-    {% include "layout/header.html" %}
+{% include "layout/header.html" %}
     <section class="auth-login">
         <div>
             <h1 class="auth_title">Log in</h1>
         </div>
-        {% with success = get_flashed_messages(category_filter=["success"]) %}
-        {% if success %}
-        <div class="auth_msg success">
-            <ul>
-                {% for message in success %}
-                <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-        {% endwith %}
-        {% with error = get_flashed_messages(category_filter=["error"]) %}
-            {% if error %}
-            <div class="auth_msg error">
-                <ul>
-                    {% for message in error %}
-                    <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-            {% endif %}
-        {% endwith %}
+        {% include "flash-msg.html" %}
         <form method="post" action="{{ request.path }}">
             {{ form.csrf_token }}
             <div class="auth_field">
