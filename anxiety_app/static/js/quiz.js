@@ -68,7 +68,7 @@ const test = (function () {
     function _attachEvents() {
         next = document.getElementById("next");
         next.disabled = true;
-        next.addEventListener("click", _fetchQuestions);
+        next.addEventListener("click", _fetchQuestions, {once: true});
 
         inputs = document.querySelectorAll("input[type='radio']");
         for (input of inputs) {
@@ -78,8 +78,6 @@ const test = (function () {
     }
 
     function _detachEvents() {
-        next.removeEventListener("click", _fetchQuestions);
-
         for (input of inputs) {
             input.removeEventListener("input", _enableNextBtn);
         }
