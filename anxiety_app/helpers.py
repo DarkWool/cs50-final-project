@@ -1,4 +1,3 @@
-import os
 import shortuuid
 import requests
 import psycopg2.extras as ext
@@ -8,8 +7,6 @@ from datetime import datetime
 
 from anxiety_app import app
 from anxiety_app.db import connect_db, single_query
-
-API_KEY = os.environ.get("API_KEY")
 
 # Object to request a new quote from the API
 requestQuote = {
