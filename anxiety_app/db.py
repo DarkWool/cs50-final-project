@@ -19,11 +19,15 @@ def single_query(query, parameters=None, fetchall=False):
     else:
         cursor.execute(query, parameters)
 
-    if fetchall == True:
-        result = cursor.fetchall()
-    else:
-        result = cursor.fetchone()
+    try:
+        if fetchall == True:
+            result = cursor.fetchall()
+        else:
+            result = cursor.fetchone()
+    except psycopg2.ProgrammingError:
+        result = None
 
+    conn.commit()
     cursor.close()
     conn.close()
     return result

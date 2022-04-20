@@ -61,6 +61,7 @@ CREATE TABLE answers (
 );
 
 CREATE TABLE api_quote (
+    id SERIAL PRIMARY KEY,
     quote TEXT NOT NULL,
     author TEXT NOT NULL,
     fetch_date INTEGER NOT NULL

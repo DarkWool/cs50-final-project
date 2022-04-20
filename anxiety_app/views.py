@@ -31,7 +31,8 @@ app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
 @login_required
 def dashboard():
     date = single_query(
-        "SELECT TO_CHAR(date_created, 'Month DD, YYYY') as date FROM users WHERE id = %s", (current_user.id,)
+        "SELECT TO_CHAR(date_created, 'Month DD, YYYY') as date FROM users WHERE id = %s",
+        (current_user.id,),
     )
 
     return render_template("users/dashboard.html", date=date["date"])
@@ -97,7 +98,6 @@ def changePassword():
 @app.route("/")
 def index():
     quote = getQuote()
-    print(quote)
 
     return render_template("index.html", quote=quote)
 

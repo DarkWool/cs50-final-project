@@ -7,19 +7,14 @@ from flask_login import current_user
 from datetime import datetime
 
 from anxiety_app import app
-from anxiety_app.db import connect_db
+from anxiety_app.db import connect_db, single_query
 
 API_KEY = os.environ.get("API_KEY")
 
 # Object to request a new quote from the API
 requestQuote = {
-    "url": "https://quotel-quotes.p.rapidapi.com/quotes/random",
-    "headers": {
-        "content-type": "application/json",
-        "x-rapidapi-host": "quotel-quotes.p.rapidapi.com",
-        "x-rapidapi-key": API_KEY,
-    },
-    "body": {"topicIds": [75]},
+    "url": "https://zenquotes.io/api/random",
+    "headers": {"content-type": "application/json"},
 }
 
 # Convert numbers to letters (used in the test)
@@ -171,31 +166,39 @@ def getKeyword(result):
 
 def getQuote():
     today = datetime.today().day
+    dbQuote = single_query("SELECT * FROM api_quote WHERE id = 1")
 
-    conn = connect_db()
-    cursor = conn.cursor(cursor_factory=ext.DictCursor)
-    cursor.execute("SELECT * FROM api_quote")
-    dbQuote = cursor.fetchone()
-
-    if dbQuote == None or dbQuote["fetch_date"] != today:
-        response = requests.post(
-            url=requestQuote["url"],
-            json=requestQuote["body"],
-            headers=requestQuote["headers"],
+    if dbQuote == None:
+        newQuote = fetchQuote(
+            "INSERT INTO api_quote (quote, author, fetch_date) VALUES(%s, %s, %s)",
+            today,
         )
-        if response.status_code == 200:
-            newQuote = response.json()
+    elif dbQuote["fetch_date"] != today:
+        newQuote = fetchQuote(
+            "UPDATE api_quote SET quote = %s, author = %s, fetch_date = %s WHERE id = 1",
+            today,
+        )
+    else:
+        return dbQuote
 
-            cursor.execute(
-                "INSERT INTO api_quote VALUES(%s, %s, %s)",
-                (newQuote["quote"], newQuote["name"], today),
-            )
+    if newQuote == False:
+        return dbQuote
 
-            conn.commit()
-            cursor.close()
-            conn.close()
-            return newQuote
+    return newQuote
 
-    cursor.close()
-    conn.close()
-    return dbQuote
+
+def fetchQuote(query, today):
+    response = requests.get(url=requestQuote["url"], headers=requestQuote["headers"])
+
+    if response.status_code == 200:
+        newQuote = response.json()[0]
+        single_query(query, (newQuote["q"], newQuote["a"], today))
+
+        return {
+            "quote": newQuote["q"],
+            "author": newQuote["a"],
+        }
+    else:
+        single_query("UPDATE api_quote SET fetch_date = %s WHERE id = 1", (today,))
+
+        return False
