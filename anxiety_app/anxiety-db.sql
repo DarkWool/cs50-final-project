@@ -1,4 +1,5 @@
 -- FOR POSTGRESQL
+DROP TABLE IF EXISTS api_quote;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS tests;
 DROP TABLE IF EXISTS results;
@@ -33,13 +34,13 @@ CREATE TABLE results (
     date DATE NOT NULL DEFAULT CURRENT_DATE
 );
 
-CREATE TABLE IF NOT EXISTS category_results (
+CREATE TABLE category_results (
     result_id INTEGER NOT NULL,
     category_id INTEGER NOT NULL,
     result INTEGER NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS questions (
+CREATE TABLE questions (
     id SERIAL PRIMARY KEY,
     test_id INTEGER NOT NULL,
     question TEXT NOT NULL,
@@ -47,16 +48,22 @@ CREATE TABLE IF NOT EXISTS questions (
     category_id INTEGER
 );
 
-CREATE TABLE IF NOT EXISTS questions_categories (
+CREATE TABLE questions_categories (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS answers (
+CREATE TABLE answers (
     test_id INTEGER,
     question_id INTEGER,
     answer TEXT NOT NULL,
     value INTEGER NOT NULL
+);
+
+CREATE TABLE api_quote (
+    quote TEXT NOT NULL,
+    author TEXT NOT NULL,
+    fetch_date INTEGER NOT NULL
 );
 
 INSERT INTO tests (name, slug, same_answers) VALUES ('Anxiety Test', 'anxiety-test', TRUE);

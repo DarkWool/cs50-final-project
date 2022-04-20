@@ -15,10 +15,11 @@ from flask import (
 )
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
+from datetime import datetime
 
 from anxiety_app.db import connect_db, single_query
 from anxiety_app.forms import changePasswordForm
-from anxiety_app.helpers import getNextQuestion, getTestResult
+from anxiety_app.helpers import getNextQuestion, getTestResult, getQuote
 from anxiety_app.auth import User
 
 load_dotenv()
@@ -95,7 +96,9 @@ def changePassword():
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    quote = getQuote()
+
+    return render_template("index.html", quote=quote)
 
 
 @app.route("/test-info")

@@ -10,10 +10,14 @@ def connect_db():
     return conn
 
 
-def single_query(query, parameters, fetchall=False):
+def single_query(query, parameters=None, fetchall=False):
     conn = psycopg2.connect(DB_URL)
     cursor = conn.cursor(cursor_factory=ext.DictCursor)
-    cursor.execute(query, parameters)
+
+    if parameters == None:
+        cursor.execute(query)
+    else:
+        cursor.execute(query, parameters)
 
     if fetchall == True:
         result = cursor.fetchall()

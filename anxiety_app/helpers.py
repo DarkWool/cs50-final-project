@@ -1,10 +1,26 @@
+import os
 import shortuuid
+import requests
 import psycopg2.extras as ext
 
-from calendar import c
+from flask_login import current_user
+from datetime import datetime
+
 from anxiety_app import app
 from anxiety_app.db import connect_db
-from flask_login import current_user
+
+API_KEY = os.environ.get("API_KEY")
+
+# Object to request a new quote from the API
+requestQuote = {
+    "url": "https://quotel-quotes.p.rapidapi.com/quotes/random",
+    "headers": {
+        "content-type": "application/json",
+        "x-rapidapi-host": "quotel-quotes.p.rapidapi.com",
+        "x-rapidapi-key": API_KEY,
+    },
+    "body": {"topicIds": [75]},
+}
 
 # Convert numbers to letters (used in the test)
 @app.template_filter("getLetter")
@@ -151,3 +167,35 @@ def getKeyword(result):
         return "Moderate Anxiety"
     else:
         return "Severe Anxiety"
+
+
+def getQuote():
+    today = datetime.today().day
+
+    conn = connect_db()
+    cursor = conn.cursor(cursor_factory=ext.DictCursor)
+    cursor.execute("SELECT * FROM api_quote")
+    dbQuote = cursor.fetchone()
+
+    if dbQuote == None or dbQuote["fetch_date"] != today:
+        response = requests.post(
+            url=requestQuote["url"],
+            json=requestQuote["body"],
+            headers=requestQuote["headers"],
+        )
+        if response.status_code == 200:
+            newQuote = response.json()
+
+            cursor.execute(
+                "INSERT INTO api_quote VALUES(%s, %s, %s)",
+                (newQuote["quote"], newQuote["name"], today),
+            )
+
+            conn.commit()
+            cursor.close()
+            conn.close()
+            return newQuote
+
+    cursor.close()
+    conn.close()
+    return dbQuote
