@@ -2,16 +2,16 @@ import os
 import psycopg2
 import psycopg2.extras as ext
 
-DB_URL = os.environ.get("DB_URL")
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
 # Establish connection to the database
 def connect_db():
-    conn = psycopg2.connect(DB_URL)
+    conn = psycopg2.connect(DATABASE_URL)
     return conn
 
 
 def single_query(query, parameters=None, fetchall=False):
-    conn = psycopg2.connect(DB_URL)
+    conn = psycopg2.connect(DATABASE_URL)
     cursor = conn.cursor(cursor_factory=ext.DictCursor)
 
     if parameters == None:
