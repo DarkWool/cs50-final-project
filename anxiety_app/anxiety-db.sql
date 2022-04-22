@@ -74,7 +74,7 @@ VALUES
     ('Generalized Anxiety'),
     ('Social Anxiety'),
     ('Agoraphobia'),
-    ('Physical Symptomps');
+    ('Physical symptoms');
 
 INSERT INTO questions (question, test_id, question_number, category_id) 
 VALUES
