@@ -4,6 +4,7 @@
 <body class="full-viewp">
 {% include "layout/header.html" %}
     <section class="myr">
+        {% if userTests %}
         <div class="myr_header-sec">
             <h1 class="myr_main-title">Your tests results</h1>
             <p><span class="t-bold">Note: </span>Check your complete results by clicking on the 'check' button.</p>
@@ -21,6 +22,15 @@
             </article>
             {% endfor %}
         </div>
+        {% else %}
+        <div class="myr_header-sec">
+            <h1 class="myr_main-title">No results found!</h1>
+            <p>Looks like you have not made a test yet.</p>
+        </div>
+        <a href="{{ url_for('info') }}" class="myr_nores">
+            <button class="primary-btn" type="button">START HERE</button>
+        </a>
+        {% endif %}
     </section>
     {% include "layout/footer.html" %}
 </body>

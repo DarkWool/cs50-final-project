@@ -761,6 +761,11 @@ input[type="radio"] {
     margin-left: auto;
 }
 
+.myr_nores {
+    text-align: center;
+    display: block;
+}
+
 
 /* Footer */
 .m-fter {
