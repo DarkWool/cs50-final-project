@@ -153,7 +153,9 @@ def getPercentage(num, total):
 
 
 def getKeyword(result):
-    if result < 40:
+    if result <= 0:
+        return "No Anxiety"
+    elif result < 40:
         return "Mild Anxiety"
     elif result < 70:
         return "Moderate Anxiety"

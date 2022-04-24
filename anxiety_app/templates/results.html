@@ -14,8 +14,15 @@
         <div class="res_score-col">
             <h1 class="res_title">{{ result["keyword"] }}</h1>
             <h2 class="res_subtitle">Overall result: <span class="purple">{{ result["test_result"] }}%</span></h2>
-
-        {% if result["test_result"] < 40 %} 
+        
+        {% if result["test_result"] <= 0 %}
+            <p>
+                Congratulations!, you have no signs of anxiety.
+            </p>
+            <p>
+                If you believe an error occurred perhaps you want to try making the test again?
+            </p>
+        {% elif result["test_result"] < 40 %}
             <p>
                 Anxiety is the human body's natural response to stress and believe it or not it has its benefits, but
                 it can represent an obstacle for you to live normally.
