@@ -45,6 +45,7 @@ class SignUpForm(FlaskForm):
         "Repeat Password",
         [
             validators.InputRequired(),
+            validators.EqualTo("password", message="Passwords don't match.")
         ],
     )
 
